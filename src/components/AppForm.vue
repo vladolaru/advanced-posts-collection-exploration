@@ -24,7 +24,6 @@
       >
     </fieldset>
     <fieldset class="inline">
-      <label for="maxcolumns">{{ $t("form.maxcolumns") }}</label>
       <input
         id="maxcolumns"
         type="number"
@@ -59,7 +58,6 @@
       >
     </fieldset>
     <fieldset class="inline">
-      <label for="maxrows">{{ $t("form.maxrows") }}</label>
       <input
         id="maxrows"
         type="number"
@@ -106,7 +104,6 @@
       >
     </fieldset>
     <fieldset class="inline">
-      <label for="maxfeatureposition">{{ $t("form.maxfeatureposition") }}</label>
       <input
         id="maxfeatureposition"
         type="number"
@@ -164,7 +161,6 @@
       >
     </fieldset>
     <fieldset class="inline">
-      <label for="maxfragmentation">{{ $t("form.maxfragmentation") }}</label>
       <input
         id="maxfragmentation"
         type="number"
@@ -188,7 +184,7 @@
       >
     </fieldset>
     <fieldset class="inline">
-      <label for="metadetailsright">{{ $t("form.metadetailsright") }}</label>
+      <label for="metadetailsright">{{ $t("form.metadetailscenter") }}</label>
       <input
         id="metadetailsright"
         type="number"
@@ -197,6 +193,7 @@
         @input="$store.commit(`updateMetaDetailsRight`, $event.target.value)"
         :value="metadetailsright"
       >
+      <label for="metadetailsright">{{ $t("form.metadetailsright") }}</label>
     </fieldset>
 
     <p>{{ $t("form.imageweightrange") }} <span class="extra-info">{{ $t("form.imageweightrangeUnits") }}</span></p>
@@ -212,7 +209,7 @@
       >
     </fieldset>
     <fieldset class="inline">
-      <label for="imageweightright">{{ $t("form.imageweightright") }}</label>
+      <label for="imageweightright">{{ $t("form.imageweightcenter") }}</label>
       <input
         id="imageweightright"
         type="number"
@@ -221,6 +218,7 @@
         @input="$store.commit(`updateImageWeightRight`, $event.target.value)"
         :value="imageweightright"
       >
+      <label for="imageweightright">{{ $t("form.imageweightright") }}</label>
     </fieldset>
 
 
