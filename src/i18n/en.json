@@ -6,13 +6,35 @@
     "columns": "Columns",
     "mincolumns": "range",
     "maxcolumns": "",
+
     "rows": "Rows",
     "rowsUnits": "(<= columns)",
     "minrows": "range",
     "maxrows": "",
+
     "featuresize": "Feature Size",
     "featuresizeUnits": "(in cols)",
     "featuresizeExtra": "(between 33% and 66% of cols)",
+    "featureposition": "Feature Position",
+    "minfeatureposition": "range",
+    "maxfeatureposition": "",
+    "subfeature": "Sub Feature",
+    "subfeatureExtra": "Have an extra post in the feature column, with secondary emphasis.",
+
+    "fragmentation": "Fragmentation",
+    "minfragmentation": "range",
+    "maxfragmentation": "",
+
+    "metadetailsrange": "Meta-details Range",
+    "metadetailsrangeUnits": "(7 = all metadetails; 0 = no metadetails)",
+    "metadetailsleft": "Meta-details from the left",
+    "metadetailsright": "to the right",
+
+    "imageweightrange": "Image Weight Range",
+    "imageweightrangeUnits": "(10 = full; 0 = text only)",
+    "imageweightleft": "Image weight from the left",
+    "imageweightright": "to the right",
+
     "columngap": "Column Gap",
     "rowgap": "Row Gap",
     "codebutton": "Please may I have some code",

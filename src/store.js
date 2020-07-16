@@ -18,7 +18,20 @@ export default new Vuex.Store({
     minfeaturesize: 2,
     maxfeaturesize: 4,
 
-    featuresizeposition: 1, // To do
+    featureposition: 1,
+    minfeatureposition: 1,
+    maxfeatureposition: 4,
+    subfeature: false,
+
+    fragmentation: 2,
+    minfragmentation: 0,
+    maxfragmentation: 3,
+
+    metadetailsleft: 7,
+    metadetailsright: 0,
+
+    imageweightleft: 8,
+    imageweightright: 0,
 
     columngap: 0,
     rowgap: 0,
@@ -89,6 +102,7 @@ export default new Vuex.Store({
 
       maybeUpdateRows(state);
       maybeUpdateFeatureSize(state);
+      maybeUpdateFeaturePosition(state);
     },
     updateMinColumns(state, payload) {
       state.mincolumns = payload;
@@ -125,6 +139,57 @@ export default new Vuex.Store({
       }
     },
 
+    updateFeaturePosition(state, payload) {
+      // Keep the feature position in the range.
+      if (payload <= state.maxfeatureposition && payload >= state.minfeatureposition) {
+        state.featureposition = payload;
+      }
+    },
+    updateMinFeaturePosition(state, payload) {
+      state.minfeatureposition = payload;
+      // Adjust the featureposition if that is the case.
+      maybeUpdateFeaturePosition(state);
+    },
+    updateMaxFeaturePosition(state, payload) {
+      state.maxfeatureposition = payload;
+      // Adjust the featureposition if that is the case.
+      maybeUpdateFeaturePosition(state);
+    },
+    updateSubFeature(state, payload) {
+      state.subfeature = payload === 'on';
+    },
+
+    updateFragmentation(state, payload) {
+      // Keep the fragmentation in the range.
+      if (payload <= state.maxfragmentation && payload >= state.minfragmentation) {
+        state.fragmentation = payload;
+      }
+    },
+    updateMinFragmentation(state, payload) {
+      state.minfragmentation = payload;
+      // Adjust the fragmentation if that is the case.
+      maybeUpdateFragmentation(state);
+    },
+    updateMaxFragmentation(state, payload) {
+      state.maxfragmentation = payload;
+      // Adjust the fragmentation if that is the case.
+      maybeUpdateFragmentation(state);
+    },
+
+    updateMetaDetailsLeft(state, payload) {
+        state.metadetailsleft = payload;
+    },
+    updateMetaDetailsRight(state, payload) {
+      state.metadetailsright = payload;
+    },
+
+    updateImageWeightLeft(state, payload) {
+      state.imageweightleft = payload;
+    },
+    updateImageWeightRight(state, payload) {
+      state.imageweightright = payload;
+    },
+
     updateColumnGap(state, payload) {
       state.columngap = payload;
     },
@@ -148,18 +213,7 @@ const maybeUpdateColumns = (state) => {
   }
 
   maybeUpdateFeatureSize(state);
-};
-
-// Update the featuresize, minfeaturesize, and maxfeaturesize, if that is the case.
-const maybeUpdateFeatureSize = (state) => {
-  state.minfeaturesize = Math.floor( state.columns * 0.333 );
-  state.maxfeaturesize = Math.ceil( state.columns * 0.666 );
-  if (state.featuresize < state.minfeaturesize) {
-    state.featuresize = state.minfeaturesize
-  }
-  if (state.featuresize > state.maxfeaturesize) {
-    state.featuresize = state.maxfeaturesize
-  }
+  maybeUpdateFeaturePosition(state);
 };
 
 // Update the rows, if that is the case.
@@ -180,6 +234,46 @@ const maybeUpdateRows = (state) => {
   // Also adjust maxrows.
   if (state.maxrows > state.columns) {
     state.maxrows = state.columns;
+  }
+};
+
+// Update the featuresize, minfeaturesize, and maxfeaturesize, if that is the case.
+const maybeUpdateFeatureSize = (state) => {
+  state.minfeaturesize = Math.floor( state.columns * 0.333 );
+  state.maxfeaturesize = Math.ceil( state.columns * 0.666 );
+  if (state.featuresize < state.minfeaturesize) {
+    state.featuresize = state.minfeaturesize
+  }
+  if (state.featuresize > state.maxfeaturesize) {
+    state.featuresize = state.maxfeaturesize
+  }
+};
+
+// Update the featureposition, minfeatureposition, and maxfeatureposition, if that is the case.
+const maybeUpdateFeaturePosition = (state) => {
+  if ( state.maxfeatureposition > state.columns-state.featuresize+1 ) {
+    state.maxfeatureposition = state.columns-state.featuresize+1
+  }
+
+  if (state.featureposition < state.minfeatureposition) {
+    state.featureposition = state.minfeatureposition
+  }
+  if (state.featureposition > state.maxfeatureposition) {
+    state.featureposition = state.maxfeatureposition
+  }
+};
+
+// Update the fragmentation, minfragmentation, and maxfragmentation, if that is the case.
+const maybeUpdateFragmentation = (state) => {
+  if ( state.maxfragmentation > Math.pow(2, state.columns-state.featuresize-1) - 1 ) {
+    state.maxfragmentation = Math.pow(2, state.columns-state.featuresize-1) - 1
+  }
+
+  if (state.fragmentation < state.minfragmentation) {
+    state.fragmentation = state.minfragmentation
+  }
+  if (state.fragmentation > state.maxfragmentation) {
+    state.fragmentation = state.maxfragmentation
   }
 };
 

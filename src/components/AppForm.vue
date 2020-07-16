@@ -83,6 +83,147 @@
       <label class="label-secondary">{{ $t("form.featuresizeExtra") }}</label>
     </fieldset>
 
+    <fieldset class="inline-parent">
+      <label for="featureposition">{{ $t("form.featureposition") }}</label>
+      <input
+        id="featureposition"
+        type="number"
+        :min="minfeatureposition"
+        :max="maxfeatureposition"
+        @input="$store.commit(`updateFeaturePosition`, $event.target.value)"
+        :value="featureposition"
+      >
+    </fieldset>
+    <fieldset class="inline">
+      <label for="minfeatureposition">{{ $t("form.minfeatureposition") }}</label>
+      <input
+        id="minfeatureposition"
+        type="number"
+        min="1"
+        :max="maxfeatureposition"
+        @input="$store.commit(`updateMinFeaturePosition`, $event.target.value)"
+        :value="minfeatureposition"
+      >
+    </fieldset>
+    <fieldset class="inline">
+      <label for="maxfeatureposition">{{ $t("form.maxfeatureposition") }}</label>
+      <input
+        id="maxfeatureposition"
+        type="number"
+        min="1"
+        max="12"
+        @input="$store.commit(`updateMaxFeaturePosition`, $event.target.value)"
+        :value="maxfeatureposition"
+      >
+    </fieldset>
+    <fieldset>
+      <label for="subfeature-off">{{ $t("form.subfeature") }}</label>
+      <div class="switch switch--horizontal">
+        <input
+          id="subfeature-off"
+          type="radio"
+          name="subfeature"
+          :checked="subfeature ? '':'checked'"
+          value="off"
+          @change="$store.commit(`updateSubFeature`, $event.target.value)"
+        >
+        <label for="subfeature-off">Off</label>
+        <input
+          id="subfeature-on"
+          type="radio"
+          name="subfeature"
+          :checked="subfeature ? 'checked':''"
+          value="on"
+          @change="$store.commit(`updateSubFeature`, $event.target.value)"
+        >
+        <label for="subfeature-on">On</label><span class="toggle-outside"><span class="toggle-inside"></span></span>
+      </div>
+      <label class="label-secondary">{{ $t("form.subfeatureExtra") }}</label>
+    </fieldset>
+
+    <fieldset class="inline-parent">
+      <label for="fragmentation">{{ $t("form.fragmentation") }}</label>
+      <input
+        id="fragmentation"
+        type="number"
+        :min="minfragmentation"
+        :max="maxfragmentation"
+        @input="$store.commit(`updateFragmentation`, $event.target.value)"
+        :value="fragmentation"
+      >
+    </fieldset>
+    <fieldset class="inline">
+      <label for="minfragmentation">{{ $t("form.minfragmentation") }}</label>
+      <input
+        id="minfragmentation"
+        type="number"
+        min="1"
+        :max="maxfragmentation"
+        @input="$store.commit(`updateMinFragmentation`, $event.target.value)"
+        :value="minfragmentation"
+      >
+    </fieldset>
+    <fieldset class="inline">
+      <label for="maxfragmentation">{{ $t("form.maxfragmentation") }}</label>
+      <input
+        id="maxfragmentation"
+        type="number"
+        min="1"
+        max="12"
+        @input="$store.commit(`updateMaxFragmentation`, $event.target.value)"
+        :value="maxfragmentation"
+      >
+    </fieldset>
+
+    <p>{{ $t("form.metadetailsrange") }} <span class="extra-info">{{ $t("form.metadetailsrangeUnits") }}</span></p>
+    <fieldset class="inline">
+      <label for="metadetailsleft">{{ $t("form.metadetailsleft") }}</label>
+      <input
+        id="metadetailsleft"
+        type="number"
+        min="0"
+        max="7"
+        @input="$store.commit(`updateMetaDetailsLeft`, $event.target.value)"
+        :value="metadetailsleft"
+      >
+    </fieldset>
+    <fieldset class="inline">
+      <label for="metadetailsright">{{ $t("form.metadetailsright") }}</label>
+      <input
+        id="metadetailsright"
+        type="number"
+        min="0"
+        max="7"
+        @input="$store.commit(`updateMetaDetailsRight`, $event.target.value)"
+        :value="metadetailsright"
+      >
+    </fieldset>
+
+    <p>{{ $t("form.imageweightrange") }} <span class="extra-info">{{ $t("form.imageweightrangeUnits") }}</span></p>
+    <fieldset class="inline">
+      <label for="imageweightleft">{{ $t("form.imageweightleft") }}</label>
+      <input
+        id="imageweightleft"
+        type="number"
+        min="0"
+        max="7"
+        @input="$store.commit(`updateImageWeightLeft`, $event.target.value)"
+        :value="imageweightleft"
+      >
+    </fieldset>
+    <fieldset class="inline">
+      <label for="imageweightright">{{ $t("form.imageweightright") }}</label>
+      <input
+        id="imageweightright"
+        type="number"
+        min="0"
+        max="7"
+        @input="$store.commit(`updateImageWeightRight`, $event.target.value)"
+        :value="imageweightright"
+      >
+    </fieldset>
+
+
     <h3>Presentational Options</h3>
     <fieldset>
       <label for="columngap">{{ $t("form.columngap") }} <span class="label-extra-info">{{ $t("form.units") }}</span></label>
@@ -150,7 +291,10 @@ export default {
       "columns", "mincolumns", "maxcolumns",
       "rows", "minrows", "maxrows",
       "featuresize", "minfeaturesize", "maxfeaturesize",
-      "featuresizeposition",
+      "featureposition", "minfeatureposition", "maxfeatureposition", "subfeature",
+      "fragmentation", "minfragmentation", "maxfragmentation",
+      "metadetailsleft", "metadetailsright",
+      "imageweightleft", "imageweightright",
       "columngap", "rowgap"])
   },
   watch: {

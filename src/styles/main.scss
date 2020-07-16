@@ -68,6 +68,13 @@ label {
   }
 }
 
+.extra-info {
+  opacity: .7;
+  font-size: 0.8em;
+  width: auto;
+  padding-left: 10px;
+}
+
 input {
   font-size: 17px;
   background: #211f2f;
@@ -79,7 +86,6 @@ input {
 }
 
 fieldset {
-  margin-bottom: 20px;
   border: none;
   margin: 0;
   padding: 5px 0;
@@ -125,4 +131,193 @@ button {
     background: $grey;
     color: black;
   }
+}
+
+.switch {
+  width: 150px;
+  position: relative;
+  padding: 0;
+  max-height: 40px;
+  display: inline-block;
+  margin: 0;
+  font-size: 0;
+  vertical-align: middle;
+
+  input {
+    position: absolute;
+    top: 0;
+    z-index: 2;
+    opacity: 0;
+    cursor: pointer;
+
+    &:checked {
+      z-index: 1;
+    }
+
+    &:checked + label {
+      opacity: 1;
+      cursor: default;
+    }
+
+    &:not(:checked) + label:hover {
+      opacity: 0.5;
+    }
+  }
+
+  label {
+    color: #fff;
+    opacity: 0.33;
+    transition: opacity 0.25s ease;
+    cursor: pointer;
+  }
+
+  .toggle-outside {
+    height: 100%;
+    border-radius: 20px;
+    padding: 0;
+    overflow: hidden;
+    transition: 0.25s ease all;
+  }
+
+  .toggle-inside {
+    border-radius: 15px;
+    background: #4a4a4a;
+    position: absolute;
+    transition: 0.25s ease all;
+    top: 3px;
+  }
+}
+
+.switch--horizontal {
+  width: 150px;
+  height: 32px;
+  margin: 0;
+  margin-bottom: 4px;
+
+  input {
+    height: 34px;
+    width: 60px;
+    left: 32px;
+    margin: 0;
+    padding: 0;
+  }
+
+  label {
+    font-size: 16px;
+    line-height: 34px;
+    display: inline-block;
+    width: 24px;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+
+    &:last-of-type {
+      margin-left: 76px;
+    }
+  }
+
+  .toggle-outside {
+    background: #211f2f;
+    border: 1px solid #666;
+    position: absolute;
+    width: 60px;
+    left: 32px;
+  }
+
+  .toggle-inside {
+    height: 26px;
+    width: 26px;
+  }
+
+  input:checked ~ .toggle-outside .toggle-inside {
+    left: 3px;
+  }
+
+  input ~ input:checked ~ .toggle-outside .toggle-inside {
+    left: 31px;
+    background: #ccc;
+  }
+}
+
+.switch--vertical {
+  width: 24px;
+  height: 12px;
+}
+.switch--vertical input {
+  height: 100%;
+  width: 3px;
+  right: 0;
+  margin: 0;
+}
+.switch--vertical label {
+  font-size: 1.5px;
+  line-height: 3px;
+  display: block;
+  width: 8px;
+  height: 50%;
+  margin: 0;
+  text-align: center;
+}
+.switch--vertical .toggle-outside {
+  background: #fff;
+  position: absolute;
+  width: 3px;
+  height: 100%;
+  right: 0;
+  top: 0;
+}
+.switch--vertical .toggle-inside {
+  height: 2.5px;
+  left: 0.25px;
+  top: 0.25px;
+  width: 2.5px;
+}
+.switch--vertical input:checked ~ .toggle-outside .toggle-inside {
+  top: 0.25px;
+}
+.switch--vertical input ~ input:checked ~ .toggle-outside .toggle-inside {
+  top: 3.25px;
+}
+.switch--no-label label {
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  overflow: hidden;
+}
+.switch--no-label input:checked ~ .toggle-outside .toggle-inside {
+  background: rgba(0,0,0,0.2);
+  border: 1px solid rgba(0,0,0,0.2);
+}
+.switch--no-label input ~ input:checked ~ .toggle-outside {
+  background: #fff;
+}
+.switch--no-label input ~ input:checked ~ .toggle-outside .toggle-inside {
+  background: #2ecc71;
+}
+.switch--no-label.switch--vertical {
+  width: 3px;
+}
+.switch--no-label.switch--horizontal {
+  width: 6px;
+}
+.switch--no-label.switch--horizontal input,
+.switch--no-label.switch--horizontal .toggle-outside {
+  left: 0;
+}
+.switch--expanding-inner input:checked + label:hover ~ .toggle-outside .toggle-inside {
+  height: 2.5px;
+  width: 2.5px;
+}
+.switch--expanding-inner.switch--horizontal input:hover ~ .toggle-outside .toggle-inside {
+  width: 3.5px;
+}
+.switch--expanding-inner.switch--horizontal input:hover ~ input:checked ~ .toggle-outside .toggle-inside {
+  left: 2.25px;
+}
+.switch--expanding-inner.switch--vertical input:hover ~ .toggle-outside .toggle-inside {
+  height: 3.5px;
+}
+.switch--expanding-inner.switch--vertical input:hover ~ input:checked ~ .toggle-outside .toggle-inside {
+  top: 2.25px;
 }
