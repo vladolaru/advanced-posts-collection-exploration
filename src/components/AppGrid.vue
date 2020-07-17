@@ -86,7 +86,7 @@ export default {
       "rowArr",
       "columns",
       "rows",
-      "childarea"
+      "childarea",
     ]),
     ...mapGetters(["rowTemplate", "colTemplate", "divNum"])
   },
@@ -154,7 +154,7 @@ export default {
     },
     removeChild(index) {
       this.$store.commit("removeChildren", index);
-    }
+    },
   }
 };
 </script>

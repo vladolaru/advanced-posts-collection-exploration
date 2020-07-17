@@ -4,8 +4,8 @@ import { groupRepeatedUnits, createRepetition } from "./utils/repetition";
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
-  state: {
+const getDefaultState = () => {
+  return {
     columns: 6,
     mincolumns: 2,
     maxcolumns: 10,
@@ -21,7 +21,6 @@ export default new Vuex.Store({
     featureposition: 1,
     minfeatureposition: 1,
     maxfeatureposition: 4,
-    subfeature: false,
 
     fragmentation: 2,
     minfragmentation: 0,
@@ -33,12 +32,25 @@ export default new Vuex.Store({
     imageweightleft: 8,
     imageweightright: 0,
 
+    subfeature: false,
+    boostfeature: false,
+    balancemdandiw: false,
+
+    hierarchycrossing: 0,
+    flipcolsrows: false,
+
     columngap: 0,
     rowgap: 0,
-    colArr: [],
-    rowArr: [],
-    childarea: []
-  },
+    colArr: [{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"}],
+    rowArr: [{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"}],
+    childarea: [],
+
+    gridkey: 0, // Used for forcing-reset the grid.
+  }
+}
+
+export default new Vuex.Store({
+  state: getDefaultState(),
   getters: {
     colTemplate(state) {
       const unitGroups = groupRepeatedUnits(state.colArr);
@@ -68,14 +80,16 @@ export default new Vuex.Store({
             state[stateKey] = JSON.parse(queryParams.get(stateKey))
           }
         }
-      } else {
-          createArr(state.columns, state.colArr);
-          createArr(state.rows, state.rowArr);
       }
     },
     adjustArr(state, payload) {
       let newVal = Math.max(Number(payload.newVal), 0),
         oldVal = Math.max(Number(payload.oldVal), 0);
+
+      // Nothing to do if we already have everything in place.
+      if (state[payload.direction].length === newVal) {
+        return;
+      }
 
       if (newVal < oldVal) {
         // you'd think that .length would be quicker here, but it doesn't trigger the getter/computed in colTemplate etc.
@@ -190,14 +204,29 @@ export default new Vuex.Store({
       state.imageweightright = payload;
     },
 
+    updateBoostFeature(state, payload) {
+      state.boostfeature = payload === 'on';
+    },
+    updateBalanceMdAndIw(state, payload) {
+      state.balancemdandiw = payload === 'on';
+    },
+
+    updateHierarchyCrossing(state, payload) {
+      state.hierarchycrossing = payload;
+    },
+
+    updateFlipColsRows(state, payload) {
+      state.boostfeature = payload === 'on';
+    },
+
     updateColumnGap(state, payload) {
       state.columngap = payload;
     },
     updateRowGap(state, payload) {
       state.rowgap = payload;
     },
-    resetGrid(state, payload) {
-      state.childarea = [];
+    resetState(state, payload) {
+      Object.assign(state, getDefaultState());
     }
   }
 });

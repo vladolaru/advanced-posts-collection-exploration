@@ -51,7 +51,7 @@ button {
 label {
   padding-right: 18px;
   display: inline-block;
-  width: 150px;
+  width: 170px;
 
   &.label-secondary {
     opacity: .7;
@@ -73,6 +73,18 @@ label {
   font-size: 0.8em;
   width: auto;
   padding-left: 10px;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+p.label-like {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.spacer {
+  display:block;
+  height: 20px;
 }
 
 input {
@@ -114,7 +126,7 @@ button {
   border-radius: 1000px;
   border: 1px solid $teal;
   font-size: 16px;
-  margin: 20px 0 0;
+  margin: 20px 20px 0 0;
   cursor: pointer;
   transition: 0.35s all;
 

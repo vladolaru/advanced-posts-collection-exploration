@@ -1,6 +1,10 @@
 <template>
   <aside>
-    <h3>Main Parameters</h3>
+    <div class="reset-wrapper">
+      <h3 class="flush">Main Parameters</h3>
+      <button type="reset" @click="$store.commit(`resetState`);">{{ $t("form.reset") }}</button>
+    </div>
+
     <fieldset class="inline-parent">
       <label for="columns">{{ $t("form.columns") }}</label>
       <input
@@ -68,6 +72,8 @@
       >
     </fieldset>
 
+    <span class="spacer"></span>
+
     <fieldset>
       <label for="featuresize">{{ $t("form.featuresize") }} <span class="label-extra-info">{{ $t("form.featuresizeUnits") }}</span></label>
       <input
@@ -113,30 +119,8 @@
         :value="maxfeatureposition"
       >
     </fieldset>
-    <fieldset>
-      <label for="subfeature-off">{{ $t("form.subfeature") }}</label>
-      <div class="switch switch--horizontal">
-        <input
-          id="subfeature-off"
-          type="radio"
-          name="subfeature"
-          :checked="subfeature ? '':'checked'"
-          value="off"
-          @change="$store.commit(`updateSubFeature`, $event.target.value)"
-        >
-        <label for="subfeature-off">Off</label>
-        <input
-          id="subfeature-on"
-          type="radio"
-          name="subfeature"
-          :checked="subfeature ? 'checked':''"
-          value="on"
-          @change="$store.commit(`updateSubFeature`, $event.target.value)"
-        >
-        <label for="subfeature-on">On</label><span class="toggle-outside"><span class="toggle-inside"></span></span>
-      </div>
-      <label class="label-secondary">{{ $t("form.subfeatureExtra") }}</label>
-    </fieldset>
+
+    <span class="spacer"></span>
 
     <fieldset class="inline-parent">
       <label for="fragmentation">{{ $t("form.fragmentation") }}</label>
@@ -170,9 +154,12 @@
         :value="maxfragmentation"
       >
     </fieldset>
+    <p class="extra-info">{{ $t("form.fragmentationExtra") }}</p>
 
-    <p>{{ $t("form.metadetailsrange") }} <span class="extra-info">{{ $t("form.metadetailsrangeUnits") }}</span></p>
-    <fieldset class="inline">
+    <span class="spacer"></span>
+
+    <p class="label-like">{{ $t("form.metadetailsrange") }} <span class="extra-info">{{ $t("form.metadetailsrangeUnits") }}</span></p>
+    <fieldset class="inline indent">
       <label for="metadetailsleft">{{ $t("form.metadetailsleft") }}</label>
       <input
         id="metadetailsleft"
@@ -196,8 +183,10 @@
       <label for="metadetailsright">{{ $t("form.metadetailsright") }}</label>
     </fieldset>
 
-    <p>{{ $t("form.imageweightrange") }} <span class="extra-info">{{ $t("form.imageweightrangeUnits") }}</span></p>
-    <fieldset class="inline">
+    <span class="spacer"></span>
+
+    <p class="label-like">{{ $t("form.imageweightrange") }} <span class="extra-info">{{ $t("form.imageweightrangeUnits") }}</span></p>
+    <fieldset class="inline indent">
       <label for="imageweightleft">{{ $t("form.imageweightleft") }}</label>
       <input
         id="imageweightleft"
@@ -221,8 +210,124 @@
       <label for="imageweightright">{{ $t("form.imageweightright") }}</label>
     </fieldset>
 
+    <h3>Playful Parameters</h3>
+
+    <fieldset>
+      <label for="subfeature-off">{{ $t("form.subfeature") }}</label>
+      <div class="switch switch--horizontal">
+        <input
+          id="subfeature-off"
+          type="radio"
+          name="subfeature"
+          :checked="subfeature ? '':'checked'"
+          value="off"
+          @change="$store.commit(`updateSubFeature`, $event.target.value)"
+        >
+        <label for="subfeature-off">Off</label>
+        <input
+          id="subfeature-on"
+          type="radio"
+          name="subfeature"
+          :checked="subfeature ? 'checked':''"
+          value="on"
+          @change="$store.commit(`updateSubFeature`, $event.target.value)"
+        >
+        <label for="subfeature-on">On</label><span class="toggle-outside"><span class="toggle-inside"></span></span>
+      </div>
+      <label class="label-secondary">{{ $t("form.subfeatureExtra") }}</label>
+    </fieldset>
+
+    <fieldset>
+      <label for="boostfeature-off">{{ $t("form.boostfeature") }}</label>
+      <div class="switch switch--horizontal">
+        <input
+          id="boostfeature-off"
+          type="radio"
+          name="boostfeature"
+          :checked="boostfeature ? '':'checked'"
+          value="off"
+          @change="$store.commit(`updateBoostFeature`, $event.target.value)"
+        >
+        <label for="boostfeature-off">Off</label>
+        <input
+          id="boostfeature-on"
+          type="radio"
+          name="boostfeature"
+          :checked="boostfeature ? 'checked':''"
+          value="on"
+          @change="$store.commit(`updateBoostFeature`, $event.target.value)"
+        >
+        <label for="boostfeature-on">On</label><span class="toggle-outside"><span class="toggle-inside"></span></span>
+      </div>
+      <label class="label-secondary">{{ $t("form.boostfeatureExtra") }}</label>
+    </fieldset>
+
+    <fieldset>
+      <label for="balancemdandiw-off">{{ $t("form.balancemdandiw") }}</label>
+      <div class="switch switch--horizontal">
+        <input
+          id="balancemdandiw-off"
+          type="radio"
+          name="balancemdandiw"
+          :checked="balancemdandiw ? '':'checked'"
+          value="off"
+          @change="$store.commit(`updateBalanceMdAndIw`, $event.target.value)"
+        >
+        <label for="balancemdandiw-off">Off</label>
+        <input
+          id="balancemdandiw-on"
+          type="radio"
+          name="balancemdandiw"
+          :checked="balancemdandiw ? 'checked':''"
+          value="on"
+          @change="$store.commit(`updateBalanceMdAndIw`, $event.target.value)"
+        >
+        <label for="balancemdandiw-on">On</label><span class="toggle-outside"><span class="toggle-inside"></span></span>
+      </div>
+      <label class="label-secondary">{{ $t("form.balancemdandiwExtra") }}</label>
+    </fieldset>
+
+    <fieldset>
+      <label for="hierarchycrossing">{{ $t("form.hierarchycrossing") }}</label>
+      <input
+        id="hierarchycrossing"
+        type="number"
+        min="0"
+        max="10"
+        @input="$store.commit(`updateHierarchyCrossing`, $event.target.value)"
+        :value="hierarchycrossing"
+      >
+      <label class="label-secondary">{{ $t("form.hierarchycrossingUnits") }}</label>
+    </fieldset>
+    <p class="extra-info">{{ $t("form.hierarchycrossingExtra") }}</p>
+
+    <fieldset>
+      <label for="flipcolsrows-off">{{ $t("form.flipcolsrows") }}</label>
+      <div class="switch switch--horizontal">
+        <input
+          id="flipcolsrows-off"
+          type="radio"
+          name="flipcolsrows"
+          :checked="flipcolsrows ? '':'checked'"
+          value="off"
+          @change="$store.commit(`updateFlipColsRows`, $event.target.value)"
+        >
+        <label for="flipcolsrows-off">Off</label>
+        <input
+          id="flipcolsrows-on"
+          type="radio"
+          name="flipcolsrows"
+          :checked="flipcolsrows ? 'checked':''"
+          value="on"
+          @change="$store.commit(`updateFlipColsRows`, $event.target.value)"
+        >
+        <label for="flipcolsrows-on">On</label><span class="toggle-outside"><span class="toggle-inside"></span></span>
+      </div>
+      <label class="label-secondary">{{ $t("form.flipcolsrowsExtra") }}</label>
+    </fieldset>
 
     <h3>Presentational Options</h3>
+
     <fieldset>
       <label for="columngap">{{ $t("form.columngap") }} <span class="label-extra-info">{{ $t("form.units") }}</span></label>
       <input
@@ -248,7 +353,6 @@
     </fieldset>
 
     <button @click="showCodeModal = true">{{ $t("form.codebutton") }}</button>
-    <button type="reset" @click="$store.commit(`resetGrid`)">{{ $t("form.reset") }}</button>
     <app-modal v-if="showCodeModal" @close="showCodeModal = false">
       <h3 slot="header">{{ $t("modal.header.yourcode") }}</h3>
       <div slot="body">
@@ -289,10 +393,13 @@ export default {
       "columns", "mincolumns", "maxcolumns",
       "rows", "minrows", "maxrows",
       "featuresize", "minfeaturesize", "maxfeaturesize",
-      "featureposition", "minfeatureposition", "maxfeatureposition", "subfeature",
+      "featureposition", "minfeatureposition", "maxfeatureposition",
       "fragmentation", "minfragmentation", "maxfragmentation",
       "metadetailsleft", "metadetailsright",
       "imageweightleft", "imageweightright",
+
+      "subfeature", "boostfeature", "balancemdandiw",
+      "hierarchycrossing", "flipcolsrows",
       "columngap", "rowgap"])
   },
   watch: {
@@ -318,9 +425,33 @@ export default {
 
 <style lang="scss" scoped>
 aside {
-  margin: 60px 60px;
+  margin: 0 60px 60px;
   font-size: 17px;
   width: 500px;
+  position: relative;
+
+  .flush {
+    margin-top: 0;
+  }
+
+  .indent {
+    margin-left: 10px;
+  }
+
+  .reset-wrapper {
+    display: inline-block;
+    width: 100%;
+    margin-bottom: 20px;
+
+    h3 {
+      float: left;
+      margin: 0;
+    }
+    button {
+      float: right;
+      margin: 0;
+    }
+  }
 }
 
 .wat {
@@ -336,7 +467,7 @@ aside {
 @media screen and (max-width: 700px) {
   aside {
     width: 80vw;
-    margin: 100px 50px;
+    margin: 60px 50px;
   }
   button[type=reset]{
     margin-left: 20px;
