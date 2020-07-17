@@ -3,12 +3,12 @@
     "builtby": "built with 🕺 by"
   },
   "form": {
-    "columns": "Columns",
-    "mincolumns": "range",
+    "gridcolumns": "Grid Columns",
+    "mingridcolumns": "range",
 
-    "rows": "Rows",
-    "rowsUnits": "(<= columns)",
-    "minrows": "range",
+    "gridrows": "Grid Rows",
+    "gridrowsUnits": "(<= grid columns)",
+    "mingridrows": "range",
 
     "featuresize": "Feature Size",
     "featuresizeUnits": "(in cols)",
@@ -43,8 +43,8 @@
     "flipcolsrows": "Flip Cols and Rows",
     "flipcolsrowsExtra": "Treat rows as columns, and columns as rows when calculating the layout.",
 
-    "columngap": "Column Gap",
-    "rowgap": "Row Gap",
+    "gridcolumngap": "Grid Column Gap",
+    "gridrowgap": "Grid Row Gap",
     "codebutton": "Please may I have some code",
     "project": "What does this project do?",
     "reset": "Reset",

@@ -68,13 +68,13 @@
             <br>
             <span class="sp">
               <span class="ckey">grid-column-gap</span>:
-              <span class="cprop">{{ columngap }}px;</span>
+              <span class="cprop">{{ gridcolumngap }}px;</span>
             </span>
             <br>
             <span class="sp">
               <span class="ckey">grid-row-gap</span>:
-              <span class="cprop">{{ rowgap }}px</span>;
-            </span> 
+              <span class="cprop">{{ gridrowgap }}px</span>;
+            </span>
             <br>}
           </p>
           <p>
@@ -107,7 +107,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["columngap", "rowgap", "childarea"]),
+    ...mapState(["gridcolumngap", "gridrowgap", "childarea"]),
     ...mapGetters(["rowTemplate", "colTemplate"])
   },
   methods: {

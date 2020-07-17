@@ -6,69 +6,69 @@
     </div>
 
     <fieldset class="inline-parent">
-      <label for="columns">{{ $t("form.columns") }}</label>
+      <label for="gridcolumns">{{ $t("form.gridcolumns") }}</label>
       <input
-        id="columns"
+        id="gridcolumns"
         type="number"
-        :min="mincolumns"
-        :max="maxcolumns"
-        @input="$store.commit(`updateColumns`, $event.target.value)"
-        :value="columns"
+        :min="mingridcolumns"
+        :max="maxgridcolumns"
+        @change="$store.commit(`updateGridColumns`, $event.target.value)"
+        :value="gridcolumns"
       >
     </fieldset>
     <fieldset class="inline">
-      <label for="mincolumns">{{ $t("form.mincolumns") }}</label>
+      <label for="mingridcolumns">{{ $t("form.mingridcolumns") }}</label>
       <input
-        id="mincolumns"
+        id="mingridcolumns"
         type="number"
         min="1"
-        :max="maxcolumns"
-        @input="$store.commit(`updateMinColumns`, $event.target.value)"
-        :value="mincolumns"
+        :max="maxgridcolumns"
+        @change="$store.commit(`updateMinGridColumns`, $event.target.value)"
+        :value="mingridcolumns"
       >
     </fieldset>
     <fieldset class="inline">
       <input
-        id="maxcolumns"
+        id="maxgridcolumns"
         type="number"
         min="1"
         max="12"
-        @input="$store.commit(`updateMaxColumns`, $event.target.value)"
-        :value="maxcolumns"
+        @change="$store.commit(`updateMaxGridColumns`, $event.target.value)"
+        :value="maxgridcolumns"
       >
     </fieldset>
 
 
     <fieldset class="inline-parent">
-      <label for="rows">{{ $t("form.rows") }} <span class="label-extra-info">{{ $t("form.rowsUnits") }}</span></label>
+      <label for="gridrows">{{ $t("form.gridrows") }} <span class="label-extra-info">{{ $t("form.gridrowsUnits") }}</span></label>
       <input
-        id="rows"
+        id="gridrows"
         type="number"
-        :min="minrows"
-        :max="maxrows"
-        @input="$store.commit(`updateRows`, $event.target.value)"
-        :value="rows"
+        :min="mingridrows"
+        :max="maxgridrows"
+        @change="$store.commit(`updateGridRows`, $event.target.value)"
+        :value="gridrows"
       >
     </fieldset>
     <fieldset class="inline">
-      <label for="minrows">{{ $t("form.minrows") }}</label>
+      <label for="mingridrows">{{ $t("form.mingridrows") }}</label>
       <input
-        id="minrows"
+        id="mingridrows"
         type="number"
         min="1"
-        :max="maxrows"
-        @input="$store.commit(`updateMinRows`, $event.target.value)"
-        :value="minrows"
+        :max="maxgridrows"
+        @change="$store.commit(`updateMinGridRows`, $event.target.value)"
+        :value="mingridrows"
       >
     </fieldset>
     <fieldset class="inline">
       <input
-        id="maxrows"
+        id="maxgridrows"
         type="number"
         min="1"
         max="12"
-        @input="$store.commit(`updateMaxRows`, $event.target.value)"
-        :value="maxrows"
+        @change="$store.commit(`updateMaxGridRows`, $event.target.value)"
+        :value="maxgridrows"
       >
     </fieldset>
 
@@ -81,7 +81,7 @@
         type="number"
         :min="minfeaturesize"
         :max="maxfeaturesize"
-        @input="$store.commit(`updateFeatureSize`, $event.target.value)"
+        @change="$store.commit(`updateFeatureSize`, $event.target.value)"
         :value="featuresize"
       >
       <label class="label-secondary">{{ $t("form.featuresizeExtra") }}</label>
@@ -94,7 +94,7 @@
         type="number"
         :min="minfeatureposition"
         :max="maxfeatureposition"
-        @input="$store.commit(`updateFeaturePosition`, $event.target.value)"
+        @change="$store.commit(`updateFeaturePosition`, $event.target.value)"
         :value="featureposition"
       >
     </fieldset>
@@ -105,7 +105,7 @@
         type="number"
         min="1"
         :max="maxfeatureposition"
-        @input="$store.commit(`updateMinFeaturePosition`, $event.target.value)"
+        @change="$store.commit(`updateMinFeaturePosition`, $event.target.value)"
         :value="minfeatureposition"
       >
     </fieldset>
@@ -115,7 +115,7 @@
         type="number"
         min="1"
         max="12"
-        @input="$store.commit(`updateMaxFeaturePosition`, $event.target.value)"
+        @change="$store.commit(`updateMaxFeaturePosition`, $event.target.value)"
         :value="maxfeatureposition"
       >
     </fieldset>
@@ -129,7 +129,7 @@
         type="number"
         :min="minfragmentation"
         :max="maxfragmentation"
-        @input="$store.commit(`updateFragmentation`, $event.target.value)"
+        @change="$store.commit(`updateFragmentation`, $event.target.value)"
         :value="fragmentation"
       >
     </fieldset>
@@ -140,7 +140,7 @@
         type="number"
         min="1"
         :max="maxfragmentation"
-        @input="$store.commit(`updateMinFragmentation`, $event.target.value)"
+        @change="$store.commit(`updateMinFragmentation`, $event.target.value)"
         :value="minfragmentation"
       >
     </fieldset>
@@ -150,7 +150,7 @@
         type="number"
         min="1"
         max="12"
-        @input="$store.commit(`updateMaxFragmentation`, $event.target.value)"
+        @change="$store.commit(`updateMaxFragmentation`, $event.target.value)"
         :value="maxfragmentation"
       >
     </fieldset>
@@ -166,7 +166,7 @@
         type="number"
         min="0"
         max="7"
-        @input="$store.commit(`updateMetaDetailsLeft`, $event.target.value)"
+        @change="$store.commit(`updateMetaDetailsLeft`, $event.target.value)"
         :value="metadetailsleft"
       >
     </fieldset>
@@ -177,7 +177,7 @@
         type="number"
         min="0"
         max="7"
-        @input="$store.commit(`updateMetaDetailsRight`, $event.target.value)"
+        @change="$store.commit(`updateMetaDetailsRight`, $event.target.value)"
         :value="metadetailsright"
       >
       <label for="metadetailsright">{{ $t("form.metadetailsright") }}</label>
@@ -192,8 +192,8 @@
         id="imageweightleft"
         type="number"
         min="0"
-        max="7"
-        @input="$store.commit(`updateImageWeightLeft`, $event.target.value)"
+        max="10"
+        @change="$store.commit(`updateImageWeightLeft`, $event.target.value)"
         :value="imageweightleft"
       >
     </fieldset>
@@ -203,8 +203,8 @@
         id="imageweightright"
         type="number"
         min="0"
-        max="7"
-        @input="$store.commit(`updateImageWeightRight`, $event.target.value)"
+        max="10"
+        @change="$store.commit(`updateImageWeightRight`, $event.target.value)"
         :value="imageweightright"
       >
       <label for="imageweightright">{{ $t("form.imageweightright") }}</label>
@@ -294,7 +294,7 @@
         type="number"
         min="0"
         max="10"
-        @input="$store.commit(`updateHierarchyCrossing`, $event.target.value)"
+        @change="$store.commit(`updateHierarchyCrossing`, $event.target.value)"
         :value="hierarchycrossing"
       >
       <label class="label-secondary">{{ $t("form.hierarchycrossingUnits") }}</label>
@@ -329,26 +329,26 @@
     <h3>Presentational Options</h3>
 
     <fieldset>
-      <label for="columngap">{{ $t("form.columngap") }} <span class="label-extra-info">{{ $t("form.units") }}</span></label>
+      <label for="gridcolumngap">{{ $t("form.gridcolumngap") }} <span class="label-extra-info">{{ $t("form.units") }}</span></label>
       <input
-        id="columngap"
+        id="gridcolumngap"
         type="number"
         min="0"
         max="50"
-        @input="$store.commit(`updateColumnGap`, $event.target.value)"
-        :value="columngap"
+        @change="$store.commit(`updateColumnGap`, $event.target.value)"
+        :value="gridcolumngap"
       >
     </fieldset>
 
     <fieldset>
-      <label for="rowgap">{{ $t("form.rowgap") }} <span class="label-extra-info">{{ $t("form.units") }}</span></label>
+      <label for="gridrowgap">{{ $t("form.gridrowgap") }} <span class="label-extra-info">{{ $t("form.units") }}</span></label>
       <input
-        id="rowgap"
+        id="gridrowgap"
         type="number"
         min="0"
         max="50"
-        @input="$store.commit(`updateRowGap`, $event.target.value)"
-        :value="rowgap"
+        @change="$store.commit(`updateRowGap`, $event.target.value)"
+        :value="gridrowgap"
       >
     </fieldset>
 
@@ -390,8 +390,8 @@ export default {
   },
   computed: {
     ...mapState([
-      "columns", "mincolumns", "maxcolumns",
-      "rows", "minrows", "maxrows",
+      "gridcolumns", "mingridcolumns", "maxgridcolumns",
+      "gridrows", "mingridrows", "maxgridrows",
       "featuresize", "minfeaturesize", "maxfeaturesize",
       "featureposition", "minfeatureposition", "maxfeatureposition",
       "fragmentation", "minfragmentation", "maxfragmentation",
@@ -400,10 +400,10 @@ export default {
 
       "subfeature", "boostfeature", "balancemdandiw",
       "hierarchycrossing", "flipcolsrows",
-      "columngap", "rowgap"])
+      "gridcolumngap", "gridrowgap"])
   },
   watch: {
-    columns(newVal, oldVal) {
+    gridcolumns(newVal, oldVal) {
       let payload = {
         newVal,
         oldVal,
@@ -411,7 +411,7 @@ export default {
       };
       this.$store.commit("adjustArr", payload);
     },
-    rows(newVal, oldVal) {
+    gridrows(newVal, oldVal) {
       let payload = {
         newVal,
         oldVal,
@@ -419,6 +419,12 @@ export default {
       };
       this.$store.commit("adjustArr", payload);
     }
+  },
+  created () {
+    this.$store.commit("calculateChildren");
+  },
+  beforeUpdate () {
+    this.$store.commit("calculateChildren");
   }
 };
 </script>

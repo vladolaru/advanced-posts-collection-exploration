@@ -21,6 +21,7 @@ export default {
   },
   created() {
     this.$store.commit("initialArrIndex", window.location.search);
+    this.$store.commit("calculateChildren");
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <main>
     <section
-      :style="{ gridTemplateColumns: colTemplate, gridTemplateRows: '50px', gridColumnGap: columngap + 'px', gridRowGap: rowgap + 'px' }"
+      :style="{ gridTemplateColumns: colTemplate, gridTemplateRows: '50px', gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
       class="colunits"
     >
       <div v-for="(col, i) in colArr" :key="i">
@@ -16,7 +16,7 @@
     </section>
 
     <section
-      :style="{ gridTemplateColumns: '50px', gridTemplateRows: rowTemplate, gridColumnGap: columngap + 'px', gridRowGap: rowgap + 'px' }"
+      :style="{ gridTemplateColumns: '50px', gridTemplateRows: rowTemplate, gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
       class="rowunits"
     >
       <div v-for="(row, i) in rowArr" :key="i">
@@ -32,7 +32,7 @@
     <div id="gridcontainer">
       <section
         class="grid"
-        :style="{ gridTemplateColumns: colTemplate, gridTemplateRows: rowTemplate , gridColumnGap: columngap + 'px', gridRowGap: rowgap + 'px' }"
+        :style="{ gridTemplateColumns: colTemplate, gridTemplateRows: rowTemplate , gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
         @touchstart.prevent="delegatedTouchPlaceChild"
         @touchend.prevent="delegatedTouchPlaceChild"
       >
@@ -48,7 +48,7 @@
 
       <section
         class="grid gridchild"
-        :style="{ gridTemplateColumns: colTemplate, gridTemplateRows: rowTemplate , gridColumnGap: columngap + 'px', gridRowGap: rowgap + 'px' }"
+        :style="{ gridTemplateColumns: colTemplate, gridTemplateRows: rowTemplate , gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
       >
         <div
           v-for="(child, i) in childarea"
@@ -80,8 +80,8 @@ export default {
   },
   computed: {
     ...mapState([
-      "columngap",
-      "rowgap",
+      "gridcolumngap",
+      "gridrowgap",
       "colArr",
       "rowArr",
       "columns",
