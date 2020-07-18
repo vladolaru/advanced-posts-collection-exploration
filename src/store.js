@@ -60,6 +60,19 @@ export default new Vuex.Store({
     },
     divNum(state) {
       return Math.max(state.gridcolumns, 0) * Math.max(state.gridrows, 0);
+    },
+    currentStateUrl(state) {
+      let url = new URL(window.location.href);
+
+      // Make a local copy;
+      let tempState = {};
+      Object.assign(tempState, state);
+      // Clean everything not needed.
+      delete tempState.childarea;
+
+      url.search = new URLSearchParams(tempState);
+
+      return url.toString();
     }
   },
   mutations: {
@@ -71,7 +84,7 @@ export default new Vuex.Store({
           const paramIsValid = queryParams.has(stateKey)
           const paramType = typeof(state[stateKey])
 
-          if(paramIsValid && paramType === 'number') {
+          if(paramIsValid && (paramType === 'number' || paramType === 'boolean')) {
             state[stateKey] = queryParams.get(stateKey);
           }
           else if (paramIsValid && paramType === 'object') {
@@ -214,7 +227,7 @@ export default new Vuex.Store({
     },
 
     updateFlipColsRows(state, payload) {
-      state.boostfeature = payload === 'on';
+      state.flipcolsrows = payload === 'on';
     },
 
     updateColumnGap(state, payload) {

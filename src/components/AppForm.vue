@@ -352,6 +352,19 @@
       >
     </fieldset>
 
+    <span class="spacer"></span>
+
+    <p class="label-like">{{ $t("form.currentstateurl") }} <span class="extra-info">{{ $t("form.currentstateurlExtra") }}</span></p>
+    <fieldset>
+      <input
+        id="currentstateurl"
+        type="text"
+        readonly
+        :value="currentStateUrl"
+      >
+      <button class="copy-url" @click="copyCurrentStateUrlToClipboard">{{ $t("form.copyurl") }}</button>
+    </fieldset>
+
     <button @click="showCodeModal = true">{{ $t("form.codebutton") }}</button>
     <app-modal v-if="showCodeModal" @close="showCodeModal = false">
       <h3 slot="header">{{ $t("modal.header.yourcode") }}</h3>
@@ -374,7 +387,7 @@
 import AppExplain from "./AppExplain.vue";
 import AppModal from "./AppModal.vue";
 import AppCode from "./AppCode.vue";
-import { mapState } from "vuex";
+import { mapGetters, mapState } from 'vuex'
 
 export default {
   components: {
@@ -400,7 +413,8 @@ export default {
 
       "subfeature", "boostfeature", "balancemdandiw",
       "hierarchycrossing", "flipcolsrows",
-      "gridcolumngap", "gridrowgap"])
+      "gridcolumngap", "gridrowgap"]),
+    ...mapGetters(["currentStateUrl"])
   },
   watch: {
     gridcolumns(newVal, oldVal) {
@@ -418,6 +432,14 @@ export default {
         direction: "rowArr"
       };
       this.$store.commit("adjustArr", payload);
+    }
+  },
+  methods: {
+    copyCurrentStateUrlToClipboard() {
+      const copyTextarea = document.getElementById('currentstateurl');
+      copyTextarea.focus();
+      copyTextarea.select();
+      document.execCommand('copy');
     }
   },
   created () {
@@ -457,6 +479,16 @@ aside {
       float: right;
       margin: 0;
     }
+  }
+
+  #currentstateurl {
+    width: 75%;
+  }
+
+  button.copy-url {
+    margin:0;
+    padding: 4px 15px;
+    font-size: 15px;
   }
 }
 

@@ -46,6 +46,9 @@
     "gridcolumngap": "Grid Column Gap",
     "gridrowgap": "Grid Row Gap",
     "codebutton": "Please may I have some code",
+    "currentstateurl": "Current state URL",
+    "currentstateurlExtra": "(use it to share or save this state)",
+    "copyurl": "Copy URL",
     "project": "What does this project do?",
     "reset": "Reset",
     "units": "(in px)"

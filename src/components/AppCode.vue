@@ -35,7 +35,7 @@
               <span v-for="(child, i) in childarea" :key="child">
                 <span class="sp">
                   &lt;<span class="cname">div</span>
-                  <span class="cprop">&nbsp;class="div{{ i + 1 }}"</span>&gt;
+                  <span class="cprop">&nbsp;class="post{{ i + 1 }}"</span>&gt;
                   &lt;/<span class="cname">div</span>&gt;
                 </span>
                 <br>
@@ -79,11 +79,11 @@
           </p>
           <p>
             <span v-if="childarea.length > 0">
-              <span v-for="(child, i) in childarea" :key="child">
+              <span v-for="(child, i) in childarea" :key="child.gridArea">
                 <span>
-                  <span class="cname">.div{{ i + 1 }}</span> {
+                  <span class="cname">.post{{ i + 1 }}</span> {
                   <span class="ckey">grid-area</span>:
-                  <span class="cprop">{{ child }}</span>; }
+                  <span class="cprop">{{ child.gridArea }}</span>; }
                 </span>
                 <br>
               </span>
