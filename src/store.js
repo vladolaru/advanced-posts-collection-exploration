@@ -33,7 +33,7 @@ const getDefaultState = () => {
     imageweightright: 0,
 
     subfeature: false,
-    boostfeature: false,
+    boostfeature: true,
     balancemdandiw: false,
 
     hierarchycrossing: 0,
@@ -274,8 +274,8 @@ const maybeUpdateGridRows = (state) => {
 
 // Update the featuresize, minfeaturesize, and maxfeaturesize, if that is the case.
 const maybeUpdateFeatureSize = (state) => {
-  state.minfeaturesize = Math.floor( state.gridcolumns * 0.333 );
-  state.maxfeaturesize = Math.ceil( state.gridcolumns * 0.666 );
+  state.minfeaturesize = Math.floor( state.gridcolumns * 0.25 );
+  state.maxfeaturesize = Math.ceil( state.gridcolumns * 0.75 );
   if (state.featuresize < state.minfeaturesize) {
     state.featuresize = state.minfeaturesize
   }
@@ -331,15 +331,19 @@ const generateLayout = (state) => {
   // In each matrix we will ignore index 0 since it is easier to start from 1,
   // the same way CSS grid columns and rows behave.
 
+  // The order of these operation is important!
+
+  console.log( "\nGenerating a new layout...\n\n");
+
   // The "null" character:
   const emptyChar = "X";
   // These are the matrices we are going to calculate:
   // The columns width matrix
   let widthMatrix = initUnidimensionalMatrix([], state.gridcolumns, emptyChar);
   // The meta-details matrix
-  let metaDetailsMatrix = initUnidimensionalMatrix([], state.gridcolumns, emptyChar);
+  let metaDetailsMatrix = initBidimensionalMatrix([], state.gridcolumns, state.gridrows, emptyChar);
   // The image weight matrix
-  let imageWeightMatrix = initUnidimensionalMatrix([], state.gridcolumns, emptyChar);
+  let imageWeightMatrix = initBidimensionalMatrix([], state.gridcolumns, state.gridrows, emptyChar);
   // The vertical fragment size matrix
   let verticalFragmentSizeMatrix = initUnidimensionalMatrix([], state.gridcolumns, emptyChar);
   // The nth matrix: a bidimensional matrix the same size as the grid, holding in each cell what nth post should that cell belong to.
@@ -351,9 +355,9 @@ const generateLayout = (state) => {
 
   /*
   1. Calculate the columns width matrix.
-    We will take into account the feature position, feature size and fragmentation value.
-    The fragmentation value is interpreted in it's bit format, where 1 means a "cut".
-    The fragmentation value represents the fragmentation of the remaining gridcolumns after the feature size was deducted.
+     We will take into account the feature position, feature size and fragmentation value.
+     The fragmentation value is interpreted in it's bit format, where 1 means a "cut".
+     The fragmentation value represents the fragmentation of the remaining gridcolumns after the feature size was deducted.
    */
 
   let widthIdx = 1;
@@ -388,11 +392,12 @@ const generateLayout = (state) => {
     }
   }
 
-  console.log( "The width matrix: " + widthMatrix);
+  console.log( "The width matrix: ".padEnd(45,' ') + widthMatrix);
 
   /*
   2. Calculate the meta-details matrix.
-    We will spread the meta-details range left-to-right. Each column will consume the range according to its width.
+     We will spread the meta-details range left-to-right. Each column will consume the range according to its width.
+     Even it is a bidimensional matrix, for now we will only generate one row and copy it.
    */
   for (i=1; i <= state.gridcolumns; i++) {
     // Determine the other end of the current column.
@@ -403,25 +408,30 @@ const generateLayout = (state) => {
 
     // Now calculate.
     if (i === 1) {
-      metaDetailsMatrix[i] = state.metadetailsleft;
+      metaDetailsMatrix[1][i] = state.metadetailsleft;
     } else if (end === state.gridcolumns) {
-      metaDetailsMatrix[i] = state.metadetailsright;
+      metaDetailsMatrix[1][i] = state.metadetailsright;
     } else {
-      metaDetailsMatrix[i] = Math.round(state.metadetailsleft - ((state.metadetailsleft - state.metadetailsright) * (i + end - 1) / (2 * state.gridcolumns)));
+      metaDetailsMatrix[1][i] = Math.round(state.metadetailsleft - ((state.metadetailsleft - state.metadetailsright) * (i + end - 1) / (2 * state.gridcolumns)));
     }
 
     // Fill the entire column with the same meta-details value.
     for (j=i; j <= end; j++) {
-      metaDetailsMatrix[j] = metaDetailsMatrix[i];
+      metaDetailsMatrix[1][j] = metaDetailsMatrix[1][i];
     }
     i=end;
   }
+  // Copy the first row to all of the rest.
+  for (i=2; i <= state.gridrows; i++) {
+    metaDetailsMatrix[i] = metaDetailsMatrix[1].slice(); // .slice() creates a copy of the array, not reference.
+  }
 
-  console.log( "The meta-details matrix: " + metaDetailsMatrix);
+  console.log( "The meta-details matrix: ".padEnd(45,' ') + metaDetailsMatrix[1]);
 
   /*
   3. Calculate the image weight matrix.
-    We will spread the image weight range left-to-right. Each column will consume the range according to its width.
+     We will spread the image weight range left-to-right. Each column will consume the range according to its width.
+     Even it is a bidimensional matrix, for now we will only generate one row and copy it.
    */
   for (i=1; i <= state.gridcolumns; i++) {
     // Determine the other end of the current column.
@@ -432,95 +442,109 @@ const generateLayout = (state) => {
 
     // Now calculate.
     if (i === 1) {
-      imageWeightMatrix[i] = state.imageweightleft;
+      imageWeightMatrix[1][i] = state.imageweightleft;
     } else if (end === state.gridcolumns) {
-      imageWeightMatrix[i] = state.imageweightright;
+      imageWeightMatrix[1][i] = state.imageweightright;
     } else {
-      imageWeightMatrix[i] = Math.round(state.imageweightleft - ((state.imageweightleft - state.imageweightright) * (i + end - 1) / (2 * state.gridcolumns)));
+      imageWeightMatrix[1][i] = Math.round(state.imageweightleft - ((state.imageweightleft - state.imageweightright) * (i + end - 1) / (2 * state.gridcolumns)));
     }
 
     // Fill the entire column with the same meta-details value.
     for (j=i; j <= end; j++) {
-      imageWeightMatrix[j] = imageWeightMatrix[i];
+      imageWeightMatrix[1][j] = imageWeightMatrix[1][i];
     }
     i=end;
   }
+  // Copy the first row to all of the rest.
+  for (i=2; i <= state.gridrows; i++) {
+    imageWeightMatrix[i] = imageWeightMatrix[1].slice(); // .slice() creates a copy of the array, not reference.
+  }
 
-  console.log( "The image weight matrix: " + imageWeightMatrix);
+  console.log( "The image weight matrix: ".padEnd(45,' ') + imageWeightMatrix[1]);
 
   /*
   4. Handle the boost feature emphasis.
-   We will assign the maximum meta-details and image weight value to the feature, and assign its current value to the column holding the maximum values.
+     We will assign the maximum meta-details and image weight value to the feature, and assign its current value to the column holding the maximum values.
   */
   if (state.boostfeature && state.featuresize > 0) {
     // Find column with maximum meta-details value, if the feature isn't already at the max.
     let maxMetaDetailsPos = 1,
       maxImageWeightPos = 1;
     for (i = 1; i <= state.gridcolumns; i++) {
-      if (metaDetailsMatrix[i] > metaDetailsMatrix[maxMetaDetailsPos]) {
+      if (metaDetailsMatrix[1][i] > metaDetailsMatrix[1][maxMetaDetailsPos]) {
         maxMetaDetailsPos = i;
       }
 
-      if (imageWeightMatrix[i] > imageWeightMatrix[maxImageWeightPos]) {
+      if (imageWeightMatrix[1][i] > imageWeightMatrix[1][maxImageWeightPos]) {
         maxImageWeightPos = i;
       }
     }
 
     if (maxMetaDetailsPos !== state.featureposition) {
       // We have something to switch.
-      let featureValue = metaDetailsMatrix[state.featureposition];
-      let maxValue = metaDetailsMatrix[maxMetaDetailsPos];
+      let featureValue = metaDetailsMatrix[1][state.featureposition];
+      let maxValue = metaDetailsMatrix[1][maxMetaDetailsPos];
 
       // Go and fill each column with the switched values.
       i = maxMetaDetailsPos;
       while (widthMatrix[i] === widthMatrix[maxMetaDetailsPos]) {
-        metaDetailsMatrix[i] = featureValue;
+        metaDetailsMatrix[1][i] = featureValue;
         i++;
       }
       i = state.featureposition;
       while (widthMatrix[i] === widthMatrix[state.featureposition]) {
-        metaDetailsMatrix[i] = maxValue;
+        metaDetailsMatrix[1][i] = maxValue;
         i++;
       }
 
-      console.log( "The boosted feature meta-details matrix: " + metaDetailsMatrix);
+      // Copy the first row to all of the rest.
+      for (i=2; i <= state.gridrows; i++) {
+        metaDetailsMatrix[i] = metaDetailsMatrix[1].slice(); // .slice() creates a copy of the array, not reference.
+      }
+
+      console.log( "The boosted feature meta-details matrix: ".padEnd(45,' ') + metaDetailsMatrix[1]);
     }
 
     if (maxImageWeightPos !== state.featureposition) {
       // We have something to switch.
-      let featureValue = imageWeightMatrix[state.featureposition];
-      let maxValue = imageWeightMatrix[maxImageWeightPos];
+      let featureValue = imageWeightMatrix[1][state.featureposition];
+      let maxValue = imageWeightMatrix[1][maxImageWeightPos];
 
       // Go and fill each column with the switched values.
       i = maxImageWeightPos;
       while (widthMatrix[i] === widthMatrix[maxImageWeightPos]) {
-        imageWeightMatrix[i] = featureValue;
+        imageWeightMatrix[1][i] = featureValue;
         i++;
       }
       i = state.featureposition;
       while (widthMatrix[i] === widthMatrix[state.featureposition]) {
-        imageWeightMatrix[i] = maxValue;
+        imageWeightMatrix[1][i] = maxValue;
         i++;
       }
 
-      console.log( "The boosted feature image weight matrix: " + imageWeightMatrix);
+      // Copy the first row to all of the rest.
+      for (i=2; i <= state.gridrows; i++) {
+        imageWeightMatrix[i] = imageWeightMatrix[1].slice(); // .slice() creates a copy of the array, not reference.
+      }
+
+      console.log( "The boosted feature image weight matrix: ".padEnd(45,' ') + imageWeightMatrix[1]);
     }
   }
 
   /*
   5. Determine the vertical fragment size matrix.
-   The fragment size will range in the number of grid rows and 1.
+     The fragment size will range in the number of grid rows and 1.
   */
   // First determine the max meta-details and image weight value.
-  let maxMetaDetailsValue = metaDetailsMatrix[1],
-    maxImageWeightValue = imageWeightMatrix[1];
+  let maxMetaDetailsValue = metaDetailsMatrix[1][1],
+    maxImageWeightValue = imageWeightMatrix[1][1];
   for (i = 1; i <= state.gridcolumns; i++) {
-    if (metaDetailsMatrix[i] > maxMetaDetailsValue) {
-      maxMetaDetailsValue = metaDetailsMatrix[i];
+    if (metaDetailsMatrix[1][i] > maxMetaDetailsValue) {
+      maxMetaDetailsValue = metaDetailsMatrix[1][i];
     }
 
-    if (imageWeightMatrix[i] > maxImageWeightValue) {
-      maxImageWeightValue = imageWeightMatrix[i];
+    if (imageWeightMatrix[1][i] > maxImageWeightValue) {
+      maxImageWeightValue = imageWeightMatrix[1][i];
     }
   }
   for (i=1; i <= state.gridcolumns; i++) {
@@ -531,8 +555,12 @@ const generateLayout = (state) => {
     }
 
     // Now calculate.
-    // @todo Maybe balance the value with a maximum ratio allowed between gridcols and gridrows (something like  1:3)
-    verticalFragmentSizeMatrix[i] = Math.round((((metaDetailsMatrix[i] / maxMetaDetailsValue) + (imageWeightMatrix[i] / maxImageWeightValue)) / 2) * state.gridrows);
+    verticalFragmentSizeMatrix[i] = Math.round((((metaDetailsMatrix[1][i] / maxMetaDetailsValue) + (imageWeightMatrix[1][i] / maxImageWeightValue)) / 2) * state.gridrows);
+    // The vertical fragment size can't be more than the column width times 3 (a really tall post).
+    if (verticalFragmentSizeMatrix[i] > (end - i + 1) * 3) {
+      verticalFragmentSizeMatrix[i] = (end - i + 1) * 3;
+    }
+    // Safety measures.
     if (verticalFragmentSizeMatrix[i] < 1) {
       verticalFragmentSizeMatrix[i] = 1;
     }
@@ -541,13 +569,101 @@ const generateLayout = (state) => {
     }
 
     // Fill the entire column with the same fragment size.
-    for (j=i; j <= end; j++) {
+    for (j = i; j <= end; j++) {
       verticalFragmentSizeMatrix[j] = verticalFragmentSizeMatrix[i];
     }
     i=end;
   }
 
-  console.log( "The vertical fragment size matrix: " + verticalFragmentSizeMatrix);
+  console.log( "The vertical fragment size matrix: ".padEnd(45,' ') + verticalFragmentSizeMatrix);
+
+  /*
+  6. Determine the nth bidimensional matrix.
+     Each grid cell will be filled with the nth post that cell belongs to. From this matrix we can determine the post grid coordinates,
+     its aspect ratio, area, etc.
+  */
+
+  // We start with the first post in the list.
+  let currentNth = 1;
+
+  // Start with the feature column.
+  if (state.featuresize > 0) {
+    i = 1;
+    while (i <= verticalFragmentSizeMatrix[state.featureposition]) {
+      j = state.featureposition;
+      do {
+        nthMatrix[i][j] = currentNth;
+        j++;
+      } while (widthMatrix[state.featureposition] === widthMatrix[j])
+
+      i++;
+    }
+
+    currentNth++;
+
+    if (i <= state.gridrows) {
+      // We have room under the feature for a secondary feature post.
+      // We will reduce the meta-details and image weight by 33% that of the main feature post.
+      while (i <= state.gridrows) {
+        j = state.featureposition;
+        do {
+          nthMatrix[i][j] = currentNth;
+
+          // Adjust the meta-details and image weight.
+          metaDetailsMatrix[i][j] = Math.round(metaDetailsMatrix[i][j] * 0.66);
+          imageWeightMatrix[i][j] = Math.round(imageWeightMatrix[i][j] * 0.66);
+
+          j++;
+        } while (widthMatrix[state.featureposition] === widthMatrix[j])
+
+        i++;
+      }
+
+      currentNth++;
+    }
+  }
+
+  // Now start from the left top corner and go through each column, left to right.
+  let currentColumnStartCol = 1;
+  let currentPostStartRow;
+  while (currentColumnStartCol <= state.gridcolumns) {
+    if (nthMatrix[1][currentColumnStartCol] !== emptyChar) {
+      currentColumnStartCol++;
+      continue;
+    }
+
+    // Fill the current column with posts.
+    currentPostStartRow = 1;
+    while (currentPostStartRow <= state.gridrows) {
+      i = currentPostStartRow;
+      while (i <= currentPostStartRow + verticalFragmentSizeMatrix[currentColumnStartCol] - 1 && i <= state.gridrows) {
+        j = currentColumnStartCol;
+        do {
+          nthMatrix[i][j] = currentNth;
+          j++;
+        } while (widthMatrix[currentColumnStartCol] === widthMatrix[j])
+
+        i++;
+      }
+      currentNth++;
+      currentPostStartRow = i;
+    }
+  }
+
+  console.log( "\nThe nth matrix: ".padEnd(42,' ') + '0 - ' + nthMatrix[0].join(' '));
+  for (i = 1; i < nthMatrix.length; i++) {
+    console.log(' '.padEnd(41,' ') + i + ' - ' + nthMatrix[i].join(' '));
+  }
+
+  console.log( "\nThe final meta-details full matrix: ".padEnd(42,' ') + '0 - ' + metaDetailsMatrix[0].join(' '));
+  for (i = 1; i < metaDetailsMatrix.length; i++) {
+    console.log(' '.padEnd(41,' ') + i + ' - ' + metaDetailsMatrix[i].join(' '));
+  }
+
+  console.log( "\nThe final image weight full matrix: ".padEnd(42,' ') + '0 - ' + imageWeightMatrix[0].join(' '));
+  for (i = 1; i < imageWeightMatrix.length; i++) {
+    console.log(' '.padEnd(41,' ') + i + ' - ' + imageWeightMatrix[i].join(' '));
+  }
 }
 
 const initUnidimensionalMatrix = (matrix, length, character = "X") => {
@@ -568,14 +684,14 @@ const initUnidimensionalMatrix = (matrix, length, character = "X") => {
 
 const initBidimensionalMatrix = (matrix, width, height, nullChar) => {
   // Put in a guard row, at index 0.
-  matrix.push(initUnidimensionalMatrix([], height, "/"));
+  matrix.push(initUnidimensionalMatrix([], width, "/"));
 
   // Go to equal the width, since the 0 index will be ignored.
-  for (let i = 0; i <= width; i++) {
-    matrix.push(initUnidimensionalMatrix([], height, nullChar));
+  for (let i = 0; i < height; i++) {
+    matrix.push(initUnidimensionalMatrix([], width, nullChar));
   }
   // Put in an extra guard row.
-  matrix.push(initUnidimensionalMatrix([], height, "/"));
+  matrix.push(initUnidimensionalMatrix([], width, "/"));
 
   return matrix;
 }

@@ -12,7 +12,7 @@
 
     "featuresize": "Feature Size",
     "featuresizeUnits": "(in cols)",
-    "featuresizeExtra": "(between 33% and 66% of cols)",
+    "featuresizeExtra": "(between 25% and 75% of cols)",
     "featureposition": "Feature Position",
     "minfeatureposition": "range",
     "fragmentation": "Fragmentation",
