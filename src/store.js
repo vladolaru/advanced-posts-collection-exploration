@@ -39,13 +39,11 @@ const getDefaultState = () => {
     hierarchycrossing: 0,
     flipcolsrows: false,
 
-    gridcolumngap: 0,
-    gridrowgap: 0,
+    gridcolumngap: 5,
+    gridrowgap: 5,
     colArr: [{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"}],
     rowArr: [{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"}],
     childarea: [],
-
-    gridkey: 0, // Used for forcing-reset the grid.
   }
 }
 
@@ -322,7 +320,6 @@ const createArr = (direction, arr) => {
 // This is the main workhorse containing the logic of our layout "engine".
 // Given the current state it will generate a layout of posts.
 const generateLayout = (state) => {
-  state.childarea = ["3 / 2 / 6 / 4","1 / 3 / 5 / 5","2 / 4 / 6 / 6"];
 
   // Before we can get to generating the "grid areas" for each post (meaning start col and row plus end col and ro),
   // we need to do a couple of preliminary calculations.
@@ -664,6 +661,57 @@ const generateLayout = (state) => {
   for (i = 1; i < imageWeightMatrix.length; i++) {
     console.log(' '.padEnd(41,' ') + i + ' - ' + imageWeightMatrix[i].join(' '));
   }
+
+  /*
+  7. Finally, generate the posts layout for CSS Grid.
+  */
+
+  state.childarea = [];
+  currentNth = 1;
+  let currentPostDetails = {}
+
+  while (currentPostDetails = getNthPostDetails(currentNth, nthMatrix, metaDetailsMatrix, imageWeightMatrix)) {
+    state.childarea.push({
+      'nthPost': currentNth,
+      'gridArea': `${currentPostDetails.startGridRow} / ${currentPostDetails.startGridColumn} / ${currentPostDetails.endGridRow + 1} / ${currentPostDetails.endGridColumn + 1}`,
+      'metaDetails': currentPostDetails.metaDetails,
+      'imageWeight': currentPostDetails.imageWeight,
+    });
+    currentNth++;
+  }
+}
+
+const getNthPostDetails = (currentNth, nthMatrix, metaDetailsMatrix, imageWeightMatrix) => {
+  let postDetails = false;
+
+  // Go through the nthMatrix and search for the currentNth value.
+  for (let i = 1; i < nthMatrix.length; i++) {
+    for (let j = 1; j < nthMatrix[i].length; j++) {
+      if (nthMatrix[i][j] === currentNth) {
+        // Found the left top corner.
+        postDetails = {
+          'startGridColumn': j,
+          'startGridRow': i,
+          'metaDetails': metaDetailsMatrix[i][j],
+          'imageWeight': imageWeightMatrix[i][j],
+        };
+
+        // Find the right bottom corner.
+        while (j < nthMatrix[i].length && nthMatrix[i][j] === nthMatrix[i][j+1]) {
+          j++;
+        }
+        postDetails.endGridColumn = j;
+        while (i < nthMatrix.length && nthMatrix[i][j] === nthMatrix[i+1][j]) {
+          i++;
+        }
+        postDetails.endGridRow = i;
+
+        return postDetails;
+      }
+    }
+  }
+
+  return postDetails;
 }
 
 const initUnidimensionalMatrix = (matrix, length, character = "X") => {

@@ -8,7 +8,7 @@
         <input
           v-model.lazy="col.unit"
           @change="validateunit($event, i, 'col')"
-          :class="[columns > 8 ? widthfull : '']"
+          :class="[gridcolumns > 8 ? widthfull : '']"
           aria-label="Grid Template Column Measurements"
         >
         <div class="errors" v-if="errors.col.indexOf(i) !== -1">{{ $t("grid.realcssunit") }}</div>
@@ -33,16 +33,12 @@
       <section
         class="grid"
         :style="{ gridTemplateColumns: colTemplate, gridTemplateRows: rowTemplate , gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
-        @touchstart.prevent="delegatedTouchPlaceChild"
-        @touchend.prevent="delegatedTouchPlaceChild"
       >
         <div
           v-for="(item, i) in divNum"
           :key="i"
           :class="'box' + i"
           :data-id="item"
-          @mousedown="placeChild(item, 's')"
-          @mouseup="placeChild(item, 'e')"
         ></div>
       </section>
 
@@ -52,11 +48,15 @@
       >
         <div
           v-for="(child, i) in childarea"
-          :key="child"
+          :key="child.gridArea"
           :class="'child' + i"
-          :style="{ gridArea: child }"
+          :style="{ gridArea: child.gridArea }"
         >
-          <button @click="removeChild(i)">&times;</button>
+          <ul class="details">
+            <li>Nth Post: {{child.nthPost}}</li>
+            <li>Meta Details Value: {{child.metaDetails}}</li>
+            <li>Image Weight Value: {{child.imageWeight}}</li>
+          </ul>
         </div>
       </section>
     </div>
@@ -84,8 +84,8 @@ export default {
       "gridrowgap",
       "colArr",
       "rowArr",
-      "columns",
-      "rows",
+      "gridcolumns",
+      "gridrows",
       "childarea",
     ]),
     ...mapGetters(["rowTemplate", "colTemplate", "divNum"])
@@ -120,41 +120,6 @@ export default {
         this.errors[direction].splice(this.errors[direction].indexOf(i), 1);
       }
     },
-    delegatedTouchPlaceChild(ev) {
-      const target = document.elementFromPoint(
-        ev.changedTouches[0].clientX,
-        ev.changedTouches[0].clientY
-      );
-      const startend = ev.type === "touchstart" ? "s" : "e";
-      this.placeChild(target.dataset.id, startend);
-    },
-    placeChild(item, startend) {
-      //built an object first because I might use this for something else
-      this.child[`${startend}row`] = Math.ceil(item / this.columns);
-      this.child[`${startend}col`] =
-        item - (this.child[`${startend}row`] - 1) * this.columns;
-
-      //create the children css units as a string
-      if (startend === "e") {
-        // flip starts and ends if dragged in the opposite direction
-        let [startRow, endRow] =
-          this.child.srow <= this.child.erow
-            ? [this.child.srow, this.child.erow]
-            : [this.child.erow, this.child.srow];
-        let [startCol, endCol] =
-          this.child.scol <= this.child.ecol
-            ? [this.child.scol, this.child.ecol]
-            : [this.child.ecol, this.child.scol];
-
-        let childstring = `${startRow} / ${startCol} / ${endRow +
-          1} / ${endCol + 1}`;
-
-        this.$store.commit("addChildren", childstring);
-      }
-    },
-    removeChild(index) {
-      this.$store.commit("removeChildren", index);
-    },
   }
 };
 </script>
@@ -181,25 +146,12 @@ main {
 .gridchild {
   counter-reset: step;
   div {
-    counter-increment: step;
-    position: relative;
-    &:before {
-      position: absolute;
-      content: ".div" counter(step);
-      display: block;
-      padding: 0 5px;
-      text-align: center;
-      color: white;
-    }
-    button {
-      position: absolute;
-      right: 0;
-      padding: 0 5px;
-      margin: 0;
-      color: white;
-      background-color: transparent;
-      border: none;
-      z-index: 99999;
+    ul {
+      margin:0;
+      list-style: none;
+      padding: 5px 0 0 5px;
+      font-size: 0.9em;
+      line-height: 1.3em;
     }
   }
 }
