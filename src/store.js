@@ -69,6 +69,8 @@ export default new Vuex.Store({
       Object.assign(tempState, state);
       // Clean everything not needed.
       delete tempState.childarea;
+      delete tempState.colArr;
+      delete tempState.rowArr;
 
       url.search = new URLSearchParams(tempState);
 
@@ -84,12 +86,22 @@ export default new Vuex.Store({
           const paramIsValid = queryParams.has(stateKey)
           const paramType = typeof(state[stateKey])
 
-          if(paramIsValid && (paramType === 'number' || paramType === 'boolean')) {
-            state[stateKey] = queryParams.get(stateKey);
-          }
-          else if (paramIsValid && paramType === 'object') {
+          if(paramIsValid && paramType === 'number' ) {
+            state[stateKey] = parseInt( queryParams.get(stateKey) );
+          } else if(paramIsValid && paramType === 'boolean') {
+            state[stateKey] = queryParams.get(stateKey) === "true";
+          } else if (paramIsValid && paramType === 'object') {
             state[stateKey] = JSON.parse(queryParams.get(stateKey))
           }
+        }
+
+        if (!queryParams.has('colArr')) {
+          state.colArr = [];
+          createArr(state.gridcolumns, state.colArr);
+        }
+        if (!queryParams.has('rowArr')) {
+          state.rowArr = [];
+          createArr(state.gridrows, state.rowArr);
         }
       }
     },
@@ -128,6 +140,7 @@ export default new Vuex.Store({
       maybeUpdateGridRows(state);
       maybeUpdateFeatureSize(state);
       maybeUpdateFeaturePosition(state);
+      updateMaxFragmentation(state);
     },
     updateMinGridColumns(state, payload) {
       state.mingridcolumns = Math.abs(payload);
@@ -161,6 +174,8 @@ export default new Vuex.Store({
       // Keep the feature size in the range.
       if (payload <= state.maxfeaturesize && payload >= state.minfeaturesize) {
         state.featuresize = Math.abs(payload);
+
+        updateMaxFragmentation(state);
       }
     },
 
@@ -223,7 +238,7 @@ export default new Vuex.Store({
     },
 
     updateHierarchyCrossing(state, payload) {
-      state.hierarchycrossing = payload;
+      state.hierarchycrossing = Math.abs(payload);
     },
 
     updateFlipColsRows(state, payload) {
@@ -260,26 +275,18 @@ const maybeUpdateGridColumns = (state) => {
 
   maybeUpdateFeatureSize(state);
   maybeUpdateFeaturePosition(state);
+
+  updateMaxFragmentation(state);
 };
 
 // Update the gridrows, if that is the case.
 const maybeUpdateGridRows = (state) => {
-  // We don't want more gridrows than gridcolumns.
-  if (state.gridrows > state.gridcolumns) {
-    state.gridrows = state.gridcolumns;
-  }
-
   if (state.gridrows < state.mingridrows) {
     state.gridrows = state.mingridrows
   }
 
   if (state.gridrows > state.maxgridrows) {
     state.gridrows = state.maxgridrows
-  }
-
-  // Also adjust maxgridrows.
-  if (state.maxgridrows > state.gridcolumns) {
-    state.maxgridrows = state.gridcolumns;
   }
 };
 
@@ -309,18 +316,22 @@ const maybeUpdateFeaturePosition = (state) => {
   }
 };
 
-// Update the fragmentation, minfragmentation, and maxfragmentation, if that is the case.
+// Update the fragmentation and minfragmentation, if that is the case.
 const maybeUpdateFragmentation = (state) => {
-  if ( state.maxfragmentation > Math.pow(2, state.gridcolumns-state.featuresize-1) - 1 ) {
-    state.maxfragmentation = Math.pow(2, state.gridcolumns-state.featuresize-1) - 1
-  }
-
   if (state.fragmentation < state.minfragmentation) {
     state.fragmentation = state.minfragmentation
   }
   if (state.fragmentation > state.maxfragmentation) {
     state.fragmentation = state.maxfragmentation
   }
+};
+
+// Update the maxfragmentation.
+const updateMaxFragmentation = (state) => {
+  // Make the maxfragmentation, the maximum possible.
+  state.maxfragmentation = Math.pow(2, state.gridcolumns-state.featuresize-1) - 1
+
+  maybeUpdateFragmentation(state);
 };
 
 //we start off with just a few gridrows and gridcolumns filled with 1fr units
@@ -405,44 +416,10 @@ const generateLayout = (state) => {
   console.log( "The width matrix: ".padEnd(45,' ') + widthMatrix);
 
   /*
-  2. Calculate the meta-details matrix.
-     We will spread the meta-details range left-to-right. Each column will consume the range according to its width.
-     Even it is a bidimensional matrix, for now we will only generate one row and copy it.
-   */
-  for (i=1; i <= state.gridcolumns; i++) {
-    // Determine the other end of the current column.
-    let end=i;
-    while (widthMatrix[end+1] === widthMatrix[i]) {
-      end++;
-    }
-
-    // Now calculate.
-    if (i === 1) {
-      metaDetailsMatrix[1][i] = state.metadetailsleft;
-    } else if (end === state.gridcolumns) {
-      metaDetailsMatrix[1][i] = state.metadetailsright;
-    } else {
-      metaDetailsMatrix[1][i] = Math.round(state.metadetailsleft - ((state.metadetailsleft - state.metadetailsright) * (i + end - 1) / (2 * state.gridcolumns)));
-    }
-
-    // Fill the entire column with the same meta-details value.
-    for (j=i; j <= end; j++) {
-      metaDetailsMatrix[1][j] = metaDetailsMatrix[1][i];
-    }
-    i=end;
-  }
-  // Copy the first row to all of the rest.
-  for (i=2; i <= state.gridrows; i++) {
-    metaDetailsMatrix[i] = metaDetailsMatrix[1].slice(); // .slice() creates a copy of the array, not reference.
-  }
-
-  console.log( "The meta-details matrix: ".padEnd(45,' ') + metaDetailsMatrix[1]);
-
-  /*
-  3. Calculate the image weight matrix.
+  2. Calculate the image weight matrix.
      We will spread the image weight range left-to-right. Each column will consume the range according to its width.
      Even it is a bidimensional matrix, for now we will only generate one row and copy it.
-   */
+ */
   for (i=1; i <= state.gridcolumns; i++) {
     // Determine the other end of the current column.
     let end=i;
@@ -471,6 +448,47 @@ const generateLayout = (state) => {
   }
 
   console.log( "The image weight matrix: ".padEnd(45,' ') + imageWeightMatrix[1]);
+
+  /*
+  3. Calculate the meta-details matrix.
+     We will spread the meta-details range left-to-right. Each column will consume the range according to its width.
+     Even it is a bidimensional matrix, for now we will only generate one row and copy it.
+   */
+  for (i=1; i <= state.gridcolumns; i++) {
+    // Determine the other end of the current column.
+    let end=i;
+    while (widthMatrix[end+1] === widthMatrix[i]) {
+      end++;
+    }
+
+    // Now calculate.
+    if (i === 1) {
+      metaDetailsMatrix[1][i] = state.metadetailsleft;
+    } else if (end === state.gridcolumns) {
+      metaDetailsMatrix[1][i] = state.metadetailsright;
+    } else {
+      metaDetailsMatrix[1][i] = state.metadetailsleft - ((state.metadetailsleft - state.metadetailsright) * (i + end - 1) / (2 * state.gridcolumns));
+
+      // If we are instructed to balance MD with IW, we will multiply the MD value with the "distance" of the IW value from the "center" of the IW range.
+      if (state.balancemdandiw && 0 !== state.imageweightleft - state.imageweightright) {
+        metaDetailsMatrix[1][i] = metaDetailsMatrix[1][i] * (Math.abs(state.imageweightleft - state.imageweightright) / 2 / imageWeightMatrix[1][i]);
+      }
+
+      metaDetailsMatrix[1][i] = Math.round( metaDetailsMatrix[1][i] );
+    }
+
+    // Fill the entire column with the same meta-details value.
+    for (j=i; j <= end; j++) {
+      metaDetailsMatrix[1][j] = metaDetailsMatrix[1][i];
+    }
+    i=end;
+  }
+  // Copy the first row to all of the rest.
+  for (i=2; i <= state.gridrows; i++) {
+    metaDetailsMatrix[i] = metaDetailsMatrix[1].slice(); // .slice() creates a copy of the array, not reference.
+  }
+
+  console.log( "The meta-details matrix: ".padEnd(45,' ') + metaDetailsMatrix[1]);
 
   /*
   4. Handle the boost feature emphasis.
@@ -566,15 +584,20 @@ const generateLayout = (state) => {
 
     // Now calculate.
     verticalFragmentSizeMatrix[i] = Math.round((((metaDetailsMatrix[1][i] / maxMetaDetailsValue) + (imageWeightMatrix[1][i] / maxImageWeightValue)) / 2) * state.gridrows);
-    // The vertical fragment size can't be more than the column width times 3 (a really tall post).
+    // The vertical fragment size can't be more than 3 times the column width (a really tall post).
     if (verticalFragmentSizeMatrix[i] > (end - i + 1) * 3) {
       verticalFragmentSizeMatrix[i] = (end - i + 1) * 3;
     }
+
+    // If the sub feature option is active, and we have a single column for the feature, reduce the vertical fragmentation with 25%.
+    if (state.subfeature && i === state.featureposition && state.featuresize > 0 && verticalFragmentSizeMatrix[i] === state.gridrows) {
+      verticalFragmentSizeMatrix[i] = Math.floor(verticalFragmentSizeMatrix[i] * 0.75);
+    }
+
     // Safety measures.
     if (verticalFragmentSizeMatrix[i] < 1) {
       verticalFragmentSizeMatrix[i] = 1;
-    }
-    if (verticalFragmentSizeMatrix[i] > state.gridrows) {
+    } else if (verticalFragmentSizeMatrix[i] > state.gridrows) {
       verticalFragmentSizeMatrix[i] = state.gridrows;
     }
 
@@ -665,9 +688,92 @@ const generateLayout = (state) => {
     console.log(' '.padEnd(41,' ') + i + ' - ' + nthMatrix[i].join(' '));
   }
 
-  console.log( "\nThe final meta-details full matrix: ".padEnd(42,' ') + '0 - ' + metaDetailsMatrix[0].join(' '));
-  for (i = 1; i < metaDetailsMatrix.length; i++) {
-    console.log(' '.padEnd(41,' ') + i + ' - ' + metaDetailsMatrix[i].join(' '));
+  /*
+  7. Handle the hierarchy crossing.
+     We will not cross into the feature post. We will only cross left to right, only "over" a post with a lower nth count.
+     We will only cross if the left post matches in height a post or more on the right.
+     The rate of consumption is related to the nth, area, IW and MD of the post being expanded and the post(s) being replaced.
+     Also, crossing at the top of the layout is more expensive than crossing at a lower row.
+  */
+
+  // We start with the first post in the list.
+  let maxNth = currentNth;
+  let hierachyCrossingStrenth = state.hierarchycrossing;
+
+  currentNth = 1;
+  while (hierachyCrossingStrenth > 0 && currentNth <= maxNth) {
+    let currentPostDetails = getNthPostDetails(currentNth, nthMatrix, metaDetailsMatrix, imageWeightMatrix);
+    if (false === currentPostDetails) {
+      currentNth++;
+      continue;
+    }
+
+    // If the current post is all the way to the right edge, stop.
+    if (currentPostDetails.endGridColumn === state.gridcolumns) {
+      break;
+    }
+
+    // Now identify its right-side neighbors.
+    let topNeighborPostDetails = getNthPostDetails(nthMatrix[currentPostDetails.startGridRow][currentPostDetails.endGridColumn+1], nthMatrix, metaDetailsMatrix, imageWeightMatrix);
+    let bottomNeighborPostDetails = getNthPostDetails(nthMatrix[currentPostDetails.endGridRow][currentPostDetails.endGridColumn+1], nthMatrix, metaDetailsMatrix, imageWeightMatrix);
+    // If the neighbors don't match the height in rows of the current post, skip this post from crossing.
+    if (topNeighborPostDetails.startGridRow !== currentPostDetails.startGridRow || bottomNeighborPostDetails.endGridRow !== currentPostDetails.endGridRow) {
+      currentNth++;
+      continue;
+    }
+
+    // Calculate the score of the to-be replaced post(s).
+    // Each post's score correlated to its nth value. The lower the nth value the bigger the score boost.
+    let replacedPostScore = (maxNth / topNeighborPostDetails.nth) * (topNeighborPostDetails.area + topNeighborPostDetails.imageWeight + topNeighborPostDetails.metaDetails);
+    if (bottomNeighborPostDetails.nth !== topNeighborPostDetails.nth) {
+      let counter = 1;
+      for (i = topNeighborPostDetails.nth+1; i <= bottomNeighborPostDetails.nth; i++) {
+        const postDetails = getNthPostDetails(i, nthMatrix, metaDetailsMatrix, imageWeightMatrix);
+        if (false === postDetails) {
+          continue;
+        }
+
+        counter++;
+        // It is increasingly "harder" to replace multiple posts.
+        replacedPostScore += (maxNth / postDetails.nth) * (postDetails.area + postDetails.imageWeight + postDetails.metaDetails * counter) * counter;
+      }
+    }
+
+    // If the to-be replaced post(s) score is larger than the remaining hierarchy crossing strength, nothing to do.
+    if (hierachyCrossingStrenth < replacedPostScore) {
+      currentNth++;
+      continue;
+    }
+
+    let currentPostScore = (maxNth / currentPostDetails.nth) * (currentPostDetails.area + currentPostDetails.imageWeight + currentPostDetails.metaDetails) * Math.pow(2*hierachyCrossingStrenth/50, 3);
+    // If the current post score is bigger than the to-be replaced post(s) score, it's a go.
+    if (currentPostScore > replacedPostScore) {
+      // Expand the current post over the replaced ones.
+      for (i = topNeighborPostDetails.startGridRow; i <= bottomNeighborPostDetails.endGridRow; i++) {
+        for (j = topNeighborPostDetails.startGridColumn; j <= topNeighborPostDetails.endGridColumn; j++) {
+          nthMatrix[i][j] = currentNth;
+
+          // Also replace the image weight and meta-details.
+          imageWeightMatrix[i][j] = currentPostDetails.imageWeight;
+          metaDetailsMatrix[i][j] = currentPostDetails.metaDetails;
+        }
+      }
+
+      // Decrease the crossing strength.
+      hierachyCrossingStrenth -= replacedPostScore;
+
+      // We now have a gap in the post list. We need to renumber the posts after the replaced ones and adjust the maxnth.
+      // The image weight and meta-details remain unchanged.
+      // Work with the new maxNth.
+      maxNth = renumberNthMatrix(nthMatrix);
+    }
+
+    currentNth++;
+  }
+
+  console.log( "\nThe nth matrix after hierarchy crossing: ".padEnd(42,' ') + '0 - ' + nthMatrix[0].join(' '));
+  for (i = 1; i < nthMatrix.length; i++) {
+    console.log(' '.padEnd(41,' ') + i + ' - ' + nthMatrix[i].join(' '));
   }
 
   console.log( "\nThe final image weight full matrix: ".padEnd(42,' ') + '0 - ' + imageWeightMatrix[0].join(' '));
@@ -675,8 +781,13 @@ const generateLayout = (state) => {
     console.log(' '.padEnd(41,' ') + i + ' - ' + imageWeightMatrix[i].join(' '));
   }
 
+  console.log( "\nThe final meta-details full matrix: ".padEnd(42,' ') + '0 - ' + metaDetailsMatrix[0].join(' '));
+  for (i = 1; i < metaDetailsMatrix.length; i++) {
+    console.log(' '.padEnd(41,' ') + i + ' - ' + metaDetailsMatrix[i].join(' '));
+  }
+
   /*
-  7. Finally, generate the posts layout for CSS Grid.
+  8. Finally, generate the posts layout for CSS Grid.
   */
 
   state.childarea = [];
@@ -694,19 +805,63 @@ const generateLayout = (state) => {
   }
 }
 
-const getNthPostDetails = (currentNth, nthMatrix, metaDetailsMatrix, imageWeightMatrix) => {
+const renumberNthMatrix = (nthMatrix) => {
+  let newNth = 1;
+  let postDetails;
+
+  for (let nth = 1; nth <= getMaxNth(nthMatrix); nth++) {
+    // If we can't find a nth post, it means it was removed and we need to adjust.
+    postDetails = getNthPostDetails(nth, nthMatrix);
+    if (false === postDetails) {
+      continue;
+    }
+
+    if (postDetails.nth > newNth) {
+      // Change the current post's nth.
+      for (let i = postDetails.startGridRow; i <= postDetails.endGridRow; i++) {
+        for (let j = postDetails.startGridColumn; j <= postDetails.endGridColumn; j++) {
+          nthMatrix[i][j] = newNth;
+        }
+      }
+    }
+
+    newNth++;
+  }
+
+  // Return the maxNth.
+  return newNth - 1;
+}
+
+const getMaxNth = (nthMatrix) => {
+  let maxNth = 0;
+  for (let i = 1; i < nthMatrix.length; i++) {
+    for (let j = 1; j < nthMatrix[i].length; j++) {
+      if (nthMatrix[i][j] > maxNth) {
+        maxNth = nthMatrix[i][j];
+      }
+    }
+  }
+
+  return maxNth;
+}
+
+const getNthPostDetails = (nth, nthMatrix, metaDetailsMatrix = false, imageWeightMatrix = false) => {
   let postDetails = false;
 
   // Go through the nthMatrix and search for the currentNth value.
   for (let i = 1; i < nthMatrix.length; i++) {
     for (let j = 1; j < nthMatrix[i].length; j++) {
-      if (nthMatrix[i][j] === currentNth) {
+      if (nthMatrix[i][j] === nth) {
         // Found the left top corner.
         postDetails = {
+          'nth': nth,
           'startGridColumn': j,
           'startGridRow': i,
-          'metaDetails': metaDetailsMatrix[i][j],
-          'imageWeight': imageWeightMatrix[i][j],
+          'endGridColumn': j,
+          'endGridRow': i,
+          'metaDetails': metaDetailsMatrix ? metaDetailsMatrix[i][j] : false,
+          'imageWeight': imageWeightMatrix ? imageWeightMatrix[i][j] :false,
+          'area': 1,
         };
 
         // Find the right bottom corner.
@@ -718,6 +873,9 @@ const getNthPostDetails = (currentNth, nthMatrix, metaDetailsMatrix, imageWeight
           i++;
         }
         postDetails.endGridRow = i;
+
+        // Calculate the area.
+        postDetails.area = (postDetails.endGridRow - postDetails.startGridRow + 1) * (postDetails.endGridColumn - postDetails.startGridColumn + 1);
 
         return postDetails;
       }

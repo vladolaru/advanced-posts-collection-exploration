@@ -149,39 +149,12 @@
         id="maxfragmentation"
         type="number"
         min="1"
-        max="12"
+        max="255"
         @change="$store.commit(`updateMaxFragmentation`, $event.target.value)"
         :value="maxfragmentation"
       >
     </fieldset>
     <p class="extra-info">{{ $t("form.fragmentationExtra") }}</p>
-
-    <span class="spacer"></span>
-
-    <p class="label-like">{{ $t("form.metadetailsrange") }} <span class="extra-info">{{ $t("form.metadetailsrangeUnits") }}</span></p>
-    <fieldset class="inline indent">
-      <label for="metadetailsleft">{{ $t("form.metadetailsleft") }}</label>
-      <input
-        id="metadetailsleft"
-        type="number"
-        min="0"
-        max="7"
-        @change="$store.commit(`updateMetaDetailsLeft`, $event.target.value)"
-        :value="metadetailsleft"
-      >
-    </fieldset>
-    <fieldset class="inline">
-      <label for="metadetailsright">{{ $t("form.metadetailscenter") }}</label>
-      <input
-        id="metadetailsright"
-        type="number"
-        min="0"
-        max="7"
-        @change="$store.commit(`updateMetaDetailsRight`, $event.target.value)"
-        :value="metadetailsright"
-      >
-      <label for="metadetailsright">{{ $t("form.metadetailsright") }}</label>
-    </fieldset>
 
     <span class="spacer"></span>
 
@@ -210,32 +183,34 @@
       <label for="imageweightright">{{ $t("form.imageweightright") }}</label>
     </fieldset>
 
-    <h3>Playful Parameters</h3>
+    <span class="spacer"></span>
 
-    <fieldset>
-      <label for="subfeature-off">{{ $t("form.subfeature") }}</label>
-      <div class="switch switch--horizontal">
-        <input
-          id="subfeature-off"
-          type="radio"
-          name="subfeature"
-          :checked="subfeature ? '':'checked'"
-          value="off"
-          @change="$store.commit(`updateSubFeature`, $event.target.value)"
-        >
-        <label for="subfeature-off">Off</label>
-        <input
-          id="subfeature-on"
-          type="radio"
-          name="subfeature"
-          :checked="subfeature ? 'checked':''"
-          value="on"
-          @change="$store.commit(`updateSubFeature`, $event.target.value)"
-        >
-        <label for="subfeature-on">On</label><span class="toggle-outside"><span class="toggle-inside"></span></span>
-      </div>
-      <label class="label-secondary">{{ $t("form.subfeatureExtra") }}</label>
+    <p class="label-like">{{ $t("form.metadetailsrange") }} <span class="extra-info">{{ $t("form.metadetailsrangeUnits") }}</span></p>
+    <fieldset class="inline indent">
+      <label for="metadetailsleft">{{ $t("form.metadetailsleft") }}</label>
+      <input
+        id="metadetailsleft"
+        type="number"
+        min="0"
+        max="7"
+        @change="$store.commit(`updateMetaDetailsLeft`, $event.target.value)"
+        :value="metadetailsleft"
+      >
     </fieldset>
+    <fieldset class="inline">
+      <label for="metadetailsright">{{ $t("form.metadetailscenter") }}</label>
+      <input
+        id="metadetailsright"
+        type="number"
+        min="0"
+        max="7"
+        @change="$store.commit(`updateMetaDetailsRight`, $event.target.value)"
+        :value="metadetailsright"
+      >
+      <label for="metadetailsright">{{ $t("form.metadetailsright") }}</label>
+    </fieldset>
+
+    <h3>Playful Parameters</h3>
 
     <fieldset>
       <label for="boostfeature-off">{{ $t("form.boostfeature") }}</label>
@@ -260,6 +235,31 @@
         <label for="boostfeature-on">On</label><span class="toggle-outside"><span class="toggle-inside"></span></span>
       </div>
       <label class="label-secondary">{{ $t("form.boostfeatureExtra") }}</label>
+    </fieldset>
+
+    <fieldset>
+      <label for="subfeature-off">{{ $t("form.subfeature") }}</label>
+      <div class="switch switch--horizontal">
+        <input
+          id="subfeature-off"
+          type="radio"
+          name="subfeature"
+          :checked="subfeature ? '':'checked'"
+          value="off"
+          @change="$store.commit(`updateSubFeature`, $event.target.value)"
+        >
+        <label for="subfeature-off">Off</label>
+        <input
+          id="subfeature-on"
+          type="radio"
+          name="subfeature"
+          :checked="subfeature ? 'checked':''"
+          value="on"
+          @change="$store.commit(`updateSubFeature`, $event.target.value)"
+        >
+        <label for="subfeature-on">On</label><span class="toggle-outside"><span class="toggle-inside"></span></span>
+      </div>
+      <label class="label-secondary">{{ $t("form.subfeatureExtra") }}</label>
     </fieldset>
 
     <fieldset>
@@ -293,7 +293,7 @@
         id="hierarchycrossing"
         type="number"
         min="0"
-        max="10"
+        max="200"
         @change="$store.commit(`updateHierarchyCrossing`, $event.target.value)"
         :value="hierarchycrossing"
       >
