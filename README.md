@@ -1,4 +1,10 @@
+<a href="https://www.netlify.com">
+  <img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg"/>
+</a>
+
 # Advanced Posts Collection (WordPress Editor Block) - Auto-layout Exploration System
+
+### Site: [https://advanced-posts-collection-block-exploration.netlify.app/](https://advanced-posts-collection-block-exploration.netlify.app/)
 
 A tool to explore the parametric generation of the block's layout. We aim to keep the number of parameters as low as possible, while aiming for a wide coverage of situations.
 
