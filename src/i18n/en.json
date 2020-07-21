@@ -34,7 +34,7 @@
     "subfeature": "Sub Feature",
     "subfeatureExtra": "Add an extra post in the feature column, with secondary emphasis, if it's not already there.",
     "boostfeature": "Boost Feature Emphasis",
-    "boostfeatureExtra": "Give the feature the maximum allowed meta-details and image weight.",
+    "boostfeatureExtra": "Give the feature the maximum available meta-details and image weight.",
     "balancemdandiw": "Balance MD with IW",
     "balancemdandiwExtra": "For a given post, \"consume\" less meta-details on high image weight and vice-versa.",
     "hierarchycrossing": "Hierarchy Crossing",
@@ -74,19 +74,13 @@
     "realcssunit": "Must use real CSS units, goofball"
   },
   "explain": {
-    "paragraph1": "You can set the numbers, and units of your columns and rows, and I'll generate a CSS grid for you! <strong>Drag within the boxes</strong> to create divs placed within the grid.",
-    "paragraph2": "Though this project can get a basic layout started for you, this project is not a comprehensive tour of CSS Grid capabilities. It is a way for you to use CSS Grid features quickly.",
-    "paragraph3": "I noticed a lot of people weren't using Grid because they felt it was too complicated and they couldn't understand it. Grid is capable of so much, and this small generator only touches on a fraction of the features. The purpose of this is so people get up and running quickly, and create more interesting layouts.",
-    "paragraph4": "Once you work with this a bit, I suggest checking out resources by",
-    "cssguide": "CSS Grid Guide on CSS-Tricks",
-    "paragraph5": "to dive deeper. There is also a",
-    "paragraph6": "and a fun little game called",
-    "paragraph7": "to help you learn more!",
-    "contributions": "This project is open to contributions!",
-    "fork": "Fork it here.",
-    "note": "Please note: Screen readers will read the divs in the order you add the divs in, please keep this in mind while you're building a grid"
-  },
-  "utils": {
-    "and": "and"
+    "paragraph1": "This is <strong>a thinking and exploration tool</strong> to help with <strong>building a layout system that is predictable, intuitive, and flexible.</strong> It is intended to be used as part of a WordPress Gutenberg block to lay out a single stream of posts (e.g. the latest posts, or posts from a certain category).",
+    "paragraph2": "The primary aim is to bind together numerical clues about the design intent of the user with the visual hierarchy of the entire layout and individual posts. The user doesn't need to completely understand every parameter and he or she can play with it and explore it's limits.",
+    "paragraph3": "The main parameters are the <strong>lowest level</strong> parameters available to the user. We will group and link these low-level parameters into higher order ones for an easier entry point. A \"Surprise Me!\" button is just what is needed for a fun start.",
+    "paragraph4": "Bear in mind that each post's container <strong>image weight and meta-details</strong> values, coupled with the \"area\" and relative order of each post will be taken into account when choosing an appropriate internal layout for each post. So, for example, a very horizontal post with a low image weight and no meta-details, will use a markup and styling that will put a small image on the left, plus a title and small excerpt.",
+    "paragraph5": "The interpretation of each post's attribute value is up to the site theme. The logic here doesn't prefer one visual style over another.",
+    "paragraph6": "Oh.. please use your browser full-screen, preferably on a big display. I haven't focused on making everything responsive to a T.",
+    "paragraph7": "I hope this inspires you in some way and <strong>I would love to hear back from you</strong> with details about <em>that way.</em> You can find more of my thoughts about various things of my site: <a href=\"https://thinkwritecode.com\" target=\"_blank\">thinkwritecode.com</a>",
+    "end-note": "Have fun!"
   }
 }
