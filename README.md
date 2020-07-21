@@ -10,14 +10,14 @@ A tool to explore the parametric generation of the block's layout. We aim to kee
 
 ## Why
 
-This exploration is helping to help us at [Pixelgrade](https://pixelgrade.com) develop a better Gutenberg block to display a set of blog posts in line with our design philosophy: intuitive options with predictable effects; good design-driven results without having to make design decisions. After all, most people are not (good) designers; that doesn't mean most sites should end up with poor designs. We, the makers of site building tools, just need to do a better job.
+This exploration is helping us at [Pixelgrade](https://pixelgrade.com) develop a better Gutenberg block to display a set of blog posts in line with our design philosophy: intuitive options with predictable effects; good design-driven results without having to make design decisions. After all, most people are not (good) designers; that doesn't mean most sites should end up with poor designs. We, the makers of site building tools, just need to do a better job.
 
 We felt the need to create this intermediary exploratory tool because complexity tends to shoot through the roof with every additional variable. By keeping the mind somewhat separated from the actual implementation, we can gain confidence in the system we are building. Also, we can explore alternate routes with minimal costs.
 
 ## Credits
 
 This tool started from or used bits and pieces of other open-source projects:
-- https://github.com/sdras/cssgridgenerator (big 👏)
+- https://github.com/sdras/cssgridgenerator (big 👏 )
 
 ## Project setup
 
