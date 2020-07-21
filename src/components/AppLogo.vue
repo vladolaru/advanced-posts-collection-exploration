@@ -12,7 +12,7 @@
         <path d="M88 9h1v9h-1zM9 89v-1h9v1z"></path>
       </g>
     </svg>
-    Adv. Posts Collection Block (parametric layout exploration)
+    Adv. Posts Collection Block Exploration (parametric layout generation)
     <p class="caveat">
       {{ $t("header.builtby") }}
       <a href="https://twitter.com/vladpotter" target="_blank">vladpotter</a>

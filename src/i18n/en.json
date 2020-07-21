@@ -7,16 +7,16 @@
     "mingridcolumns": "range",
 
     "gridrows": "Grid Rows",
-    "gridrowsUnits": "(<= grid columns)",
     "mingridrows": "range",
 
     "featuresize": "Feature Size",
-    "featuresizeUnits": "(in cols)",
+    "featuresizeUnits": "(in gridcols)",
     "featuresizeExtra": "(between 25% and 75% of cols)",
     "featureposition": "Feature Position",
+    "featurepositionUnits": "(in gridcols)",
     "minfeatureposition": "range",
-    "fragmentation": "Fragmentation",
-    "fragmentationExtra": "Controls the way the rest of the columns (excluding the feature) are fragmented; the fragmentation pattern is given by the bit representation of the fragmentation value.",
+    "fragmentation": "Columns Fragmentation",
+    "fragmentationExtra": "Controls the way the rest of the columns (excluding the feature) are \"cut\"; the fragmentation pattern is given by THE BIT REPRESENTATION of the fragmentation value, 1 = cut and start a new column, 0 = no cut. The feature will force cuts regardless of value.",
     "minfragmentation": "range",
 
     "imageweightrange": "Image Weight Range",
@@ -38,8 +38,8 @@
     "balancemdandiw": "Balance MD with IW",
     "balancemdandiwExtra": "For a given post, \"consume\" less meta-details on high image weight and vice-versa.",
     "hierarchycrossing": "Hierarchy Crossing",
-    "hierarchycrossingUnits": "(between 0 = no crossing and 100)",
-    "hierarchycrossingExtra": "Introduces cross columns posts. The bigger the value, the more crossing occurs. The value is \"consumed\" starting for the left top corner. The rate of \"consumption\" depends on the \"effort\" required to cross.",
+    "hierarchycrossingUnits": "(between 0 = no crossing and 200)",
+    "hierarchycrossingExtra": "Introduces cross columns posts. The bigger the value, the more crossing occurs. The value is \"consumed\" starting for the top left corner. The rate of \"consumption\" depends on the \"effort\" required to cross over other posts. Values over 50 have increasingly more initial \"oomph\" (momentum), and are able to cross over bigger, more important posts.",
     "flipcolsrows": "Flip Cols and Rows",
     "flipcolsrowsExtra": "Treat rows as columns, and columns as rows when calculating the layout.",
 

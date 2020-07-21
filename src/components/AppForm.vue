@@ -40,7 +40,7 @@
 
 
     <fieldset class="inline-parent">
-      <label for="gridrows">{{ $t("form.gridrows") }} <span class="label-extra-info">{{ $t("form.gridrowsUnits") }}</span></label>
+      <label for="gridrows">{{ $t("form.gridrows") }}</label>
       <input
         id="gridrows"
         type="number"
@@ -88,7 +88,7 @@
     </fieldset>
 
     <fieldset class="inline-parent">
-      <label for="featureposition">{{ $t("form.featureposition") }}</label>
+      <label for="featureposition">{{ $t("form.featureposition") }} <span class="label-extra-info">{{ $t("form.featurepositionUnits") }}</span></label>
       <input
         id="featureposition"
         type="number"

@@ -1,10 +1,10 @@
 <template>
   <main>
     <section
-      :style="{ gridTemplateColumns: colTemplate, gridTemplateRows: '50px', gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
+      :style="{ gridTemplateColumns: !flipcolsrows ? colTemplate : rowTemplate, gridTemplateRows: '50px', gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
       class="colunits"
     >
-      <div v-for="(col, i) in colArr" :key="i">
+      <div v-for="(col, i) in (!flipcolsrows ? colArr : rowArr)" :key="i">
         <input
           v-model.lazy="col.unit"
           @change="validateunit($event, i, 'col')"
@@ -16,10 +16,10 @@
     </section>
 
     <section
-      :style="{ gridTemplateColumns: '50px', gridTemplateRows: rowTemplate, gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
+      :style="{ gridTemplateColumns: '50px', gridTemplateRows: !flipcolsrows ? rowTemplate : colTemplate, gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
       class="rowunits"
     >
-      <div v-for="(row, i) in rowArr" :key="i">
+      <div v-for="(row, i) in (!flipcolsrows ? rowArr : colArr)" :key="i">
         <input
           v-model.lazy="row.unit"
           @change="validateunit($event, i, 'row')"
@@ -32,7 +32,7 @@
     <div id="gridcontainer">
       <section
         class="grid"
-        :style="{ gridTemplateColumns: colTemplate, gridTemplateRows: rowTemplate , gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
+        :style="{ gridTemplateColumns: !flipcolsrows ? colTemplate : rowTemplate, gridTemplateRows: !flipcolsrows ? rowTemplate : colTemplate, gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
       >
         <div
           v-for="(item, i) in divNum"
@@ -44,7 +44,7 @@
 
       <section
         class="grid gridchild"
-        :style="{ gridTemplateColumns: colTemplate, gridTemplateRows: rowTemplate , gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
+        :style="{ gridTemplateColumns: !flipcolsrows ? colTemplate : rowTemplate, gridTemplateRows: !flipcolsrows ? rowTemplate : colTemplate, gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
       >
         <div
           v-for="(child, i) in childarea"
@@ -87,6 +87,7 @@ export default {
       "gridcolumns",
       "gridrows",
       "childarea",
+      "flipcolsrows",
     ]),
     ...mapGetters(["rowTemplate", "colTemplate", "divNum"])
   },

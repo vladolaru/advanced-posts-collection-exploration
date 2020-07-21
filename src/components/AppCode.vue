@@ -58,12 +58,12 @@
             <br>
             <span class="sp">
               <span class="ckey">grid-template-columns</span>:
-              <span class="cprop">{{ colTemplate }}</span>;
+              <span class="cprop">{{ !flipcolsrows ? colTemplate: rowTemplate }}</span>;
             </span>
             <br>
             <span class="sp">
               <span class="ckey">grid-template-rows</span>:
-              <span class="cprop">{{ rowTemplate }}</span>;
+              <span class="cprop">{{ !flipcolsrows ? rowTemplate : colTemplate }}</span>;
             </span>
             <br>
             <span class="sp">
@@ -107,7 +107,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["gridcolumngap", "gridrowgap", "childarea"]),
+    ...mapState(["gridcolumngap", "gridrowgap", "childarea", "flipcolsrows",]),
     ...mapGetters(["rowTemplate", "colTemplate"])
   },
   methods: {
