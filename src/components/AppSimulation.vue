@@ -166,7 +166,7 @@ main {
 
 #gridcontainer {
   border: 1px solid #08ffbd;
-  width: 100%;
+  width: auto;
   height: 100%;
   padding: 10px;
   z-index: 0;

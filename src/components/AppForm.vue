@@ -95,7 +95,7 @@
 
     <span class="spacer"></span>
 
-    <fieldset>
+    <fieldset class="inline-parent">
       <label for="featuresize">{{ $t("form.featuresize") }} <span class="label-extra-info">{{ $t("form.featuresizeUnits") }}</span></label>
       <input
         id="featuresize"
@@ -106,6 +106,16 @@
         :value="featuresize"
       >
       <label class="label-secondary">{{ $t("form.featuresizeExtra") }}</label>
+    </fieldset>
+    <fieldset v-if="simulationmode" class="inline simulation-control">
+      <input
+        id="simulate-featuresize"
+        type="radio"
+        name="simulationaxis"
+        :checked="simulationaxis === 'featuresize' ? 'checked':''"
+        value="featuresize"
+        @change="$store.commit(`updateSimulationAxis`, $event.target.value)"
+      >
     </fieldset>
 
     <fieldset class="inline-parent">
@@ -574,6 +584,7 @@ aside {
   &.simulation-mode {
     .simulation-control {
       padding: 0;
+      vertical-align: text-top;
 
       input {
         width: 20px;
@@ -581,6 +592,8 @@ aside {
         padding: 0;
         margin: 0 0 0 20px;
         vertical-align: middle;
+        position: absolute;
+        right: 0;
       }
     }
   }

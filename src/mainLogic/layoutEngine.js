@@ -237,6 +237,15 @@ export const applyLayoutEngine = (state, debug = false) => {
       maxImageWeightValue = imageWeightMatrix[1][i];
     }
   }
+
+  // For the purpose of these calculations, maxMetaDetailsValue and maxImageWeightValue can't be zero.
+  if (maxImageWeightValue < 1) {
+    maxImageWeightValue = 1;
+  }
+  if (maxMetaDetailsValue < 1) {
+    maxMetaDetailsValue = 1;
+  }
+
   for (i=1; i <= state.gridcolumns; i++) {
     // Determine the other end of the current column.
     let end=i;
@@ -249,6 +258,10 @@ export const applyLayoutEngine = (state, debug = false) => {
     // The vertical fragment size can't be more than 3 times the column width (a really tall post).
     if (verticalFragmentSizeMatrix[i] > (end - i + 1) * 3) {
       verticalFragmentSizeMatrix[i] = (end - i + 1) * 3;
+    }
+    // Also the vertical fragment size can't be less than 1.
+    if (verticalFragmentSizeMatrix[i] < 1) {
+      verticalFragmentSizeMatrix[i] = 1;
     }
 
     // If the sub feature option is active, and we have a single column for the feature, reduce the vertical fragmentation with 25%.

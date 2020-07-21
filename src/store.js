@@ -223,18 +223,18 @@ export default new Vuex.Store({
       maybeUpdateFragmentation(state);
     },
 
-    updateMetaDetailsLeft(state, payload) {
-        state.metadetailsleft = Math.abs(payload);
-    },
-    updateMetaDetailsRight(state, payload) {
-      state.metadetailsright = Math.abs(payload);
-    },
-
     updateImageWeightLeft(state, payload) {
       state.imageweightleft = Math.abs(payload);
     },
     updateImageWeightRight(state, payload) {
       state.imageweightright = Math.abs(payload);
+    },
+
+    updateMetaDetailsLeft(state, payload) {
+      state.metadetailsleft = Math.abs(payload);
+    },
+    updateMetaDetailsRight(state, payload) {
+      state.metadetailsright = Math.abs(payload);
     },
 
     updateBoostFeature(state, payload) {
@@ -269,13 +269,13 @@ export default new Vuex.Store({
 
     calculateChildren(state) {
       // Fill the childarea with posts.
-      state.childarea = applyLayoutEngine(state);
+      state.childarea = applyLayoutEngine(state, true);
     },
 
     resetState(state, payload) {
       Object.assign(state, getDefaultState());
 
-      state.childarea = applyLayoutEngine(state);
+      state.childarea = applyLayoutEngine(state, true);
     },
   }
 });
