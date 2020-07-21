@@ -44,7 +44,11 @@ const getDefaultState = () => {
     gridrowgap: 5,
     colArr: [{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"}],
     rowArr: [{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"},{"unit":"1fr"}],
+
     childarea: [],
+
+    simulationmode: false,
+    simulationaxis: 'gridcolumns',
   }
 }
 
@@ -140,7 +144,7 @@ export default new Vuex.Store({
 
       maybeUpdateGridRows(state);
       maybeUpdateFeatureSize(state);
-      maybeUpdateFeaturePosition(state);
+      forceUpdateMaxFeaturePosition(state);
       forceUpdateMaxFragmentation(state);
     },
     updateMinGridColumns(state, payload) {
@@ -155,10 +159,7 @@ export default new Vuex.Store({
     },
 
     updateGridRows(state, payload) {
-      // We don't want more gridrows than gridcolumns.
-      if (payload <= state.gridcolumns) {
-        state.gridrows = Math.abs(payload);
-      }
+      state.gridrows = Math.abs(payload);
     },
     updateMinGridRows(state, payload) {
       state.mingridrows = Math.abs(payload);
@@ -176,6 +177,7 @@ export default new Vuex.Store({
       if (payload <= state.maxfeaturesize && payload >= state.minfeaturesize) {
         state.featuresize = Math.abs(payload);
 
+        forceUpdateMaxFeaturePosition(state);
         forceUpdateMaxFragmentation(state);
       }
     },
@@ -256,21 +258,30 @@ export default new Vuex.Store({
     updateRowGap(state, payload) {
       state.gridrowgap = Math.abs(payload);
     },
-    resetState(state, payload) {
-      Object.assign(state, getDefaultState());
 
-      generateLayout(state);
+    updateSimulationMode(state, payload) {
+      state.simulationmode = payload === 'on';
+    },
+
+    updateSimulationAxis(state, payload) {
+      state.simulationaxis = payload;
     },
 
     calculateChildren(state) {
       // Fill the childarea with posts.
       state.childarea = applyLayoutEngine(state);
-    }
+    },
+
+    resetState(state, payload) {
+      Object.assign(state, getDefaultState());
+
+      state.childarea = applyLayoutEngine(state);
+    },
   }
 });
 
 // Update the gridcolumns, if that is the case.
-const maybeUpdateGridColumns = (state) => {
+export const maybeUpdateGridColumns = (state) => {
   if (state.gridcolumns < state.mingridcolumns) {
     state.gridcolumns = state.mingridcolumns;
   }
@@ -280,13 +291,13 @@ const maybeUpdateGridColumns = (state) => {
   }
 
   maybeUpdateFeatureSize(state);
-  maybeUpdateFeaturePosition(state);
 
+  forceUpdateMaxFeaturePosition(state);
   forceUpdateMaxFragmentation(state);
 };
 
 // Update the gridrows, if that is the case.
-const maybeUpdateGridRows = (state) => {
+export const maybeUpdateGridRows = (state) => {
   if (state.gridrows < state.mingridrows) {
     state.gridrows = state.mingridrows
   }
@@ -297,7 +308,7 @@ const maybeUpdateGridRows = (state) => {
 };
 
 // Update the featuresize, minfeaturesize, and maxfeaturesize, if that is the case.
-const maybeUpdateFeatureSize = (state) => {
+export const maybeUpdateFeatureSize = (state) => {
   state.minfeaturesize = Math.floor( state.gridcolumns * 0.25 );
   state.maxfeaturesize = Math.ceil( state.gridcolumns * 0.75 );
   if (state.featuresize < state.minfeaturesize) {
@@ -309,7 +320,7 @@ const maybeUpdateFeatureSize = (state) => {
 };
 
 // Update the featureposition, minfeatureposition, and maxfeatureposition, if that is the case.
-const maybeUpdateFeaturePosition = (state) => {
+export const maybeUpdateFeaturePosition = (state) => {
   if ( state.maxfeatureposition > state.gridcolumns-state.featuresize+1 ) {
     state.maxfeatureposition = state.gridcolumns-state.featuresize+1
   }
@@ -323,13 +334,21 @@ const maybeUpdateFeaturePosition = (state) => {
 };
 
 // Update the fragmentation and minfragmentation, if that is the case.
-const maybeUpdateFragmentation = (state) => {
+export const maybeUpdateFragmentation = (state) => {
   if (state.fragmentation < state.minfragmentation) {
     state.fragmentation = state.minfragmentation
   }
   if (state.fragmentation > state.maxfragmentation) {
     state.fragmentation = state.maxfragmentation
   }
+};
+
+// For the update of the maxfeatureposition.
+const forceUpdateMaxFeaturePosition = (state) => {
+  // Make the maxfeatureposition, the maximum possible.
+  state.maxfeatureposition = state.gridcolumns-state.featuresize+1;
+
+  maybeUpdateFeaturePosition(state);
 };
 
 // For the update of the maxfragmentation.
@@ -341,7 +360,7 @@ const forceUpdateMaxFragmentation = (state) => {
 };
 
 //we start off with just a few gridrows and gridcolumns filled with 1fr units
-const createArr = (direction, arr) => {
+export const createArr = (direction, arr) => {
   for (let i = 1; i <= direction; i++) {
     arr.push({ unit: "1fr" });
   }

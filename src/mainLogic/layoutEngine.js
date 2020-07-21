@@ -1,6 +1,6 @@
 // This is the main workhorse containing the logic of our layout "engine".
 // Given a state, it will return a list of posts with details to handle their layout.
-export const applyLayoutEngine = (state) => {
+export const applyLayoutEngine = (state, debug = false) => {
 
   // Before we can get to generating the "grid areas" for each post (meaning start col and row plus end col and ro),
   // we need to do a couple of preliminary calculations.
@@ -11,7 +11,7 @@ export const applyLayoutEngine = (state) => {
 
   // The order of these operation is important!
 
-  console.log( "\nGenerating a new layout...\n\n");
+  debug ? console.log( "\nGenerating a new layout...\n\n"): false;
 
   // The "null" character:
   const emptyChar = "X";
@@ -75,7 +75,7 @@ export const applyLayoutEngine = (state) => {
     }
   }
 
-  console.log( "The width matrix: ".padEnd(45,' ') + widthMatrix);
+  debug ? console.log( "The width matrix: ".padEnd(45,' ') + widthMatrix) : false;
 
   /*
   2. Calculate the image weight matrix.
@@ -109,7 +109,7 @@ export const applyLayoutEngine = (state) => {
     imageWeightMatrix[i] = imageWeightMatrix[1].slice(); // .slice() creates a copy of the array, not reference.
   }
 
-  console.log( "The image weight matrix: ".padEnd(45,' ') + imageWeightMatrix[1]);
+  debug ? console.log( "The image weight matrix: ".padEnd(45,' ') + imageWeightMatrix[1]) : false;
 
   /*
   3. Calculate the meta-details matrix.
@@ -150,7 +150,7 @@ export const applyLayoutEngine = (state) => {
     metaDetailsMatrix[i] = metaDetailsMatrix[1].slice(); // .slice() creates a copy of the array, not reference.
   }
 
-  console.log( "The meta-details matrix: ".padEnd(45,' ') + metaDetailsMatrix[1]);
+  debug ? console.log( "The meta-details matrix: ".padEnd(45,' ') + metaDetailsMatrix[1]) : false;
 
   /*
   4. Handle the boost feature emphasis.
@@ -192,7 +192,7 @@ export const applyLayoutEngine = (state) => {
         metaDetailsMatrix[i] = metaDetailsMatrix[1].slice(); // .slice() creates a copy of the array, not reference.
       }
 
-      console.log( "The boosted feature meta-details matrix: ".padEnd(45,' ') + metaDetailsMatrix[1]);
+      debug ? console.log( "The boosted feature meta-details matrix: ".padEnd(45,' ') + metaDetailsMatrix[1]) : false;
     }
 
     if (maxImageWeightPos !== state.featureposition) {
@@ -217,7 +217,7 @@ export const applyLayoutEngine = (state) => {
         imageWeightMatrix[i] = imageWeightMatrix[1].slice(); // .slice() creates a copy of the array, not reference.
       }
 
-      console.log( "The boosted feature image weight matrix: ".padEnd(45,' ') + imageWeightMatrix[1]);
+      debug ? console.log( "The boosted feature image weight matrix: ".padEnd(45,' ') + imageWeightMatrix[1]) : false;
     }
   }
 
@@ -270,7 +270,7 @@ export const applyLayoutEngine = (state) => {
     i=end;
   }
 
-  console.log( "The vertical fragment size matrix: ".padEnd(45,' ') + verticalFragmentSizeMatrix);
+  debug ? console.log( "The vertical fragment size matrix: ".padEnd(45,' ') + verticalFragmentSizeMatrix) : false;
 
   /*
   6. Determine the nth bidimensional matrix.
@@ -345,9 +345,11 @@ export const applyLayoutEngine = (state) => {
     }
   }
 
-  console.log( "\nThe nth matrix: ".padEnd(42,' ') + '0 - ' + nthMatrix[0].join(' '));
-  for (i = 1; i < nthMatrix.length; i++) {
-    console.log(' '.padEnd(41,' ') + i + ' - ' + nthMatrix[i].join(' '));
+  if (debug) {
+    console.log("\nThe nth matrix: ".padEnd(42, ' ') + '0 - ' + nthMatrix[0].join(' '));
+    for (i = 1; i < nthMatrix.length; i++) {
+      console.log(' '.padEnd(41, ' ') + i + ' - ' + nthMatrix[i].join(' '));
+    }
   }
 
   /*
@@ -433,19 +435,21 @@ export const applyLayoutEngine = (state) => {
     currentNth++;
   }
 
-  console.log( "\nThe nth matrix after hierarchy crossing: ".padEnd(42,' ') + '0 - ' + nthMatrix[0].join(' '));
-  for (i = 1; i < nthMatrix.length; i++) {
-    console.log(' '.padEnd(41,' ') + i + ' - ' + nthMatrix[i].join(' '));
-  }
+  if (debug) {
+    console.log("\nThe nth matrix after hierarchy crossing: ".padEnd(42, ' ') + '0 - ' + nthMatrix[0].join(' '));
+    for (i = 1; i < nthMatrix.length; i++) {
+      console.log(' '.padEnd(41, ' ') + i + ' - ' + nthMatrix[i].join(' '));
+    }
 
-  console.log( "\nThe final image weight full matrix: ".padEnd(42,' ') + '0 - ' + imageWeightMatrix[0].join(' '));
-  for (i = 1; i < imageWeightMatrix.length; i++) {
-    console.log(' '.padEnd(41,' ') + i + ' - ' + imageWeightMatrix[i].join(' '));
-  }
+    console.log("\nThe final image weight full matrix: ".padEnd(42, ' ') + '0 - ' + imageWeightMatrix[0].join(' '));
+    for (i = 1; i < imageWeightMatrix.length; i++) {
+      console.log(' '.padEnd(41, ' ') + i + ' - ' + imageWeightMatrix[i].join(' '));
+    }
 
-  console.log( "\nThe final meta-details full matrix: ".padEnd(42,' ') + '0 - ' + metaDetailsMatrix[0].join(' '));
-  for (i = 1; i < metaDetailsMatrix.length; i++) {
-    console.log(' '.padEnd(41,' ') + i + ' - ' + metaDetailsMatrix[i].join(' '));
+    console.log("\nThe final meta-details full matrix: ".padEnd(42, ' ') + '0 - ' + metaDetailsMatrix[0].join(' '));
+    for (i = 1; i < metaDetailsMatrix.length; i++) {
+      console.log(' '.padEnd(41, ' ') + i + ' - ' + metaDetailsMatrix[i].join(' '));
+    }
   }
 
   /*

@@ -1,7 +1,8 @@
 <template>
-  <aside>
+  <aside :class="simulationmode ? 'simulation-mode' : ''">
     <div class="reset-wrapper">
       <h3 class="flush">Main Parameters</h3>
+
       <button type="reset" @click="$store.commit(`resetState`);">{{ $t("form.reset") }}</button>
     </div>
 
@@ -37,6 +38,16 @@
         :value="maxgridcolumns"
       >
     </fieldset>
+    <fieldset v-if="simulationmode" class="inline simulation-control">
+      <input
+        id="simulate-gridcolumns"
+        type="radio"
+        name="simulationaxis"
+        :checked="simulationaxis === 'gridcolumns' ? 'checked':''"
+        value="gridcolumns"
+        @change="$store.commit(`updateSimulationAxis`, $event.target.value)"
+      >
+    </fieldset>
 
 
     <fieldset class="inline-parent">
@@ -69,6 +80,16 @@
         max="12"
         @change="$store.commit(`updateMaxGridRows`, $event.target.value)"
         :value="maxgridrows"
+      >
+    </fieldset>
+    <fieldset v-if="simulationmode" class="inline simulation-control">
+      <input
+        id="simulate-gridrows"
+        type="radio"
+        name="simulationaxis"
+        :checked="simulationaxis === 'gridrows' ? 'checked':''"
+        value="gridrows"
+        @change="$store.commit(`updateSimulationAxis`, $event.target.value)"
       >
     </fieldset>
 
@@ -119,6 +140,16 @@
         :value="maxfeatureposition"
       >
     </fieldset>
+    <fieldset v-if="simulationmode" class="inline simulation-control">
+      <input
+        id="simulate-featureposition"
+        type="radio"
+        name="simulationaxis"
+        :checked="simulationaxis === 'featureposition' ? 'checked':''"
+        value="featureposition"
+        @change="$store.commit(`updateSimulationAxis`, $event.target.value)"
+      >
+    </fieldset>
 
     <span class="spacer"></span>
 
@@ -152,6 +183,16 @@
         max="255"
         @change="$store.commit(`updateMaxFragmentation`, $event.target.value)"
         :value="maxfragmentation"
+      >
+    </fieldset>
+    <fieldset v-if="simulationmode" class="inline simulation-control">
+      <input
+        id="simulate-fragmentation"
+        type="radio"
+        name="simulationaxis"
+        :checked="simulationaxis === 'fragmentation' ? 'checked':''"
+        value="fragmentation"
+        @change="$store.commit(`updateSimulationAxis`, $event.target.value)"
       >
     </fieldset>
     <p class="extra-info">{{ $t("form.fragmentationExtra") }}</p>
@@ -365,6 +406,29 @@
       <button class="copy-url" @click="copyCurrentStateUrlToClipboard">{{ $t("form.copyurl") }}</button>
     </fieldset>
 
+    <fieldset id="simulationmode" class="inline">
+      <label for="simulationmode-off">{{ $t("form.simulationmode") }}</label>
+      <div class="switch switch--horizontal">
+        <input
+          id="simulationmode-off"
+          type="radio"
+          name="simulationmode"
+          :checked="simulationmode ? '':'checked'"
+          value="off"
+          @change="$store.commit(`updateSimulationMode`, $event.target.value)"
+        >
+        <input
+          id="simulationmode-on"
+          type="radio"
+          name="simulationmode"
+          :checked="simulationmode ? 'checked':''"
+          value="on"
+          @change="$store.commit(`updateSimulationMode`, $event.target.value)"
+        >
+        <span class="toggle-outside"><span class="toggle-inside"></span></span>
+      </div>
+    </fieldset>
+
     <button @click="showCodeModal = true">{{ $t("form.codebutton") }}</button>
     <app-modal v-if="showCodeModal" @close="showCodeModal = false">
       <h3 slot="header">{{ $t("modal.header.yourcode") }}</h3>
@@ -413,6 +477,7 @@ export default {
 
       "subfeature", "boostfeature", "balancemdandiw",
       "hierarchycrossing", "flipcolsrows",
+      "simulationmode", "simulationaxis",
       "gridcolumngap", "gridrowgap"]),
     ...mapGetters(["currentStateUrl"])
   },
@@ -489,6 +554,35 @@ aside {
     margin:0;
     padding: 4px 15px;
     font-size: 15px;
+  }
+
+  #simulationmode {
+    position: absolute;
+    top: -115px;
+    right: 0;
+
+    label {
+      padding-right: 0;
+      margin-right: -20px;
+    }
+
+    .switch--horizontal {
+      width: 96px;
+    }
+  }
+
+  &.simulation-mode {
+    .simulation-control {
+      padding: 0;
+
+      input {
+        width: 20px;
+        height: 20px;
+        padding: 0;
+        margin: 0 0 0 20px;
+        vertical-align: middle;
+      }
+    }
   }
 }
 

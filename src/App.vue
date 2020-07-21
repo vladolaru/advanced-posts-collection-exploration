@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <app-header/>
-    <section class="container">
+    <section v-if="simulationmode" class="container">
+      <app-simulation/>
+      <app-form/>
+    </section>
+    <section v-else class="container">
       <app-grid/>
       <app-form/>
     </section>
@@ -11,17 +15,22 @@
 <script>
 import AppHeader from "./components/AppHeader.vue";
 import AppGrid from "./components/AppGrid.vue";
+import AppSimulation from "./components/AppSimulation.vue";
 import AppForm from "./components/AppForm.vue";
+import { mapState } from 'vuex'
 
 export default {
   components: {
     AppHeader,
     AppGrid,
+    AppSimulation,
     AppForm
+  },
+  computed: {
+    ...mapState(["simulationmode"]),
   },
   created() {
     this.$store.commit("initialArrIndex", window.location.search);
-    // this.$store.commit("calculateChildren");
   }
 };
 </script>

@@ -145,7 +145,6 @@ main {
 }
 
 .gridchild {
-  counter-reset: step;
   div {
     ul {
       margin:0;
