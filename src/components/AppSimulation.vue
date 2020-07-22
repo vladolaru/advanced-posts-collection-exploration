@@ -1,5 +1,5 @@
 <template>
-  <main>
+  <main class="simulation-container">
 
     <div id="gridcontainer" :key="componentKey">
       <div
@@ -222,6 +222,25 @@ main {
       font-size: 1em;
       padding: 2px 0 0 2px;
     }
+  }
+}
+
+@media screen and (max-width: 1500px) {
+  main.simulation-container {
+    width: calc(70vw - 0px);
+    height: 75vh;
+    margin: 15px 0 0 0;
+  }
+
+  #gridcontainer {
+    padding: 5px;
+  }
+
+  .grid-wrapper {
+    width: 23%;
+    margin: 5px 12px 25px 5px;
+    font-size: 0.9em;
+    line-height: 1.2em;
   }
 }
 

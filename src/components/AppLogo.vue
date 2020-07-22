@@ -35,6 +35,12 @@ nav {
   margin-bottom: 40px;
   text-shadow: 0px 2px 5px #000;
   text-align: center;
+
+  @media screen and (max-width: 1500px) {
+    max-width: 1000px;
+    font-size: 25px;
+    margin-bottom: 20px;
+  }
 }
 
 svg {

@@ -38,6 +38,10 @@ export default {
 <style lang="scss">
 #app {
   margin: 5vmin 5vmin 0;
+
+  @media screen and (max-width: 1500px) {
+    margin: 5vmin 5vmin 0 4vmin;
+  }
 }
 
 .container {

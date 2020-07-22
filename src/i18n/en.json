@@ -21,13 +21,13 @@
 
     "imageweightrange": "Image Weight Range",
     "imageweightrangeUnits": "(10 = full image; 0 = no image)",
-    "imageweightleft": "Image weight from",
+    "imageweightleft": "From",
     "imageweightcenter": "on the left, to",
     "imageweightright": "on the right.",
 
     "metadetailsrange": "Meta-details Range",
     "metadetailsrangeUnits": "(7 = all meta-details; 0 = no meta-details)",
-    "metadetailsleft": "Meta-details from ",
+    "metadetailsleft": "From ",
     "metadetailscenter": "on the left, to ",
     "metadetailsright": "on the right.",
 

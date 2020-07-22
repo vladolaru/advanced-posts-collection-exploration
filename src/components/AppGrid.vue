@@ -130,6 +130,10 @@ main {
   width: calc(70vw - 50px);
   height: calc(70vh - 50px);
   margin: 15px 0 0 75px;
+
+  @media screen and (max-width: 1500px) {
+    margin: 15px 0 0 60px;
+  }
 }
 
 @mixin colors($max, $color-frequency) {
@@ -218,6 +222,13 @@ main {
   height: 100%;
   div {
     align-self: center;
+  }
+
+  @media screen and (max-width: 1500px) {
+    margin-left: -60px;
+    input {
+      width: 30px;
+    }
   }
 }
 

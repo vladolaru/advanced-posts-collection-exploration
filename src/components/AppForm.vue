@@ -610,6 +610,47 @@ aside {
   cursor: pointer;
 }
 
+@media screen and (max-width: 1500px) {
+  aside {
+    margin: 0 10px 30px 30px;
+    width: 470px;
+
+    p.extra-info {
+      margin-right: 10px;
+      line-height: 1.4em;
+    }
+
+    .spacer {
+      height: 15px;
+    }
+
+    #simulationmode {
+      position: absolute;
+      top: -70px;
+    }
+
+    fieldset {
+
+      label {
+        &.label-secondary {
+          display: block;
+        }
+      }
+
+      &.inline-parent {
+        label:first-child {
+          max-width: 150px;
+          vertical-align: middle;
+
+          .label-extra-info {
+            display: block;
+          }
+        }
+      }
+    }
+  }
+}
+
 @media screen and (max-width: 700px) {
   aside {
     width: 80vw;
