@@ -225,16 +225,40 @@ export default new Vuex.Store({
 
     updateImageWeightLeft(state, payload) {
       state.imageweightleft = Math.abs(payload);
+
+      if (state.imageweightleft > 10) {
+        state.imageweightleft = 10;
+      } else if (state.imageweightleft < 0) {
+        state.imageweightleft = 0;
+      }
     },
     updateImageWeightRight(state, payload) {
       state.imageweightright = Math.abs(payload);
+
+      if (state.imageweightright > 10) {
+        state.imageweightright = 10;
+      } else if (state.imageweightright < 0) {
+        state.imageweightright = 0;
+      }
     },
 
     updateMetaDetailsLeft(state, payload) {
       state.metadetailsleft = Math.abs(payload);
+
+      if (state.metadetailsleft > 7) {
+        state.metadetailsleft = 7;
+      } else if (state.metadetailsleft < 0) {
+        state.metadetailsleft = 0;
+      }
     },
     updateMetaDetailsRight(state, payload) {
       state.metadetailsright = Math.abs(payload);
+
+      if (state.metadetailsright > 7) {
+        state.metadetailsright = 7;
+      } else if (state.metadetailsright < 0) {
+        state.metadetailsright = 0;
+      }
     },
 
     updateBoostFeature(state, payload) {
@@ -246,6 +270,12 @@ export default new Vuex.Store({
 
     updateHierarchyCrossing(state, payload) {
       state.hierarchycrossing = Math.abs(payload);
+
+      if (state.hierarchycrossing > 200) {
+        state.hierarchycrossing = 200;
+      } else if (state.hierarchycrossing < 0) {
+        state.hierarchycrossing = 0;
+      }
     },
 
     updateFlipColsRows(state, payload) {
