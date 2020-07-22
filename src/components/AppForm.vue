@@ -215,8 +215,8 @@
       <input
         id="imageweightleft"
         type="number"
-        min="0"
-        max="10"
+        :min="minimageweight"
+        :max="maximageweight"
         @change="$store.commit(`updateImageWeightLeft`, $event.target.value)"
         :value="imageweightleft"
       >
@@ -226,8 +226,8 @@
       <input
         id="imageweightright"
         type="number"
-        min="0"
-        max="10"
+        :min="minimageweight"
+        :max="maximageweight"
         @change="$store.commit(`updateImageWeightRight`, $event.target.value)"
         :value="imageweightright"
       >
@@ -242,8 +242,8 @@
       <input
         id="metadetailsleft"
         type="number"
-        min="0"
-        max="7"
+        :min="minmetadetails"
+        :max="maxmetadetails"
         @change="$store.commit(`updateMetaDetailsLeft`, $event.target.value)"
         :value="metadetailsleft"
       >
@@ -253,8 +253,8 @@
       <input
         id="metadetailsright"
         type="number"
-        min="0"
-        max="7"
+        :min="minmetadetails"
+        :max="maxmetadetails"
         @change="$store.commit(`updateMetaDetailsRight`, $event.target.value)"
         :value="metadetailsright"
       >
@@ -344,7 +344,7 @@
         id="hierarchycrossing"
         type="number"
         min="0"
-        max="200"
+        :max="maxhierarchycrossing"
         @change="$store.commit(`updateHierarchyCrossing`, $event.target.value)"
         :value="hierarchycrossing"
       >
@@ -482,11 +482,12 @@ export default {
       "featuresize", "minfeaturesize", "maxfeaturesize",
       "featureposition", "minfeatureposition", "maxfeatureposition",
       "fragmentation", "minfragmentation", "maxfragmentation",
-      "metadetailsleft", "metadetailsright",
-      "imageweightleft", "imageweightright",
+      "metadetailsleft", "metadetailsright", "minmetadetails", "maxmetadetails",
+      "imageweightleft", "imageweightright", "minimageweight", "maximageweight",
 
       "subfeature", "boostfeature", "balancemdandiw",
-      "hierarchycrossing", "flipcolsrows",
+      "hierarchycrossing", "maxhierarchycrossing",
+      "flipcolsrows",
       "simulationmode", "simulationaxis",
       "gridcolumngap", "gridrowgap"]),
     ...mapGetters(["currentStateUrl"])

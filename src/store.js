@@ -29,15 +29,20 @@ const getDefaultState = () => {
 
     metadetailsleft: 7,
     metadetailsright: 0,
+    minmetadetails: 0,
+    maxmetadetails: 7,
 
     imageweightleft: 8,
     imageweightright: 0,
+    minimageweight: 0,
+    maximageweight: 10,
 
     subfeature: false,
     boostfeature: true,
     balancemdandiw: false,
 
     hierarchycrossing: 0,
+    maxhierarchycrossing: 200,
     flipcolsrows: false,
 
     gridcolumngap: 5,
@@ -226,38 +231,38 @@ export default new Vuex.Store({
     updateImageWeightLeft(state, payload) {
       state.imageweightleft = Math.abs(payload);
 
-      if (state.imageweightleft > 10) {
-        state.imageweightleft = 10;
-      } else if (state.imageweightleft < 0) {
-        state.imageweightleft = 0;
+      if (state.imageweightleft > state.maximageweight) {
+        state.imageweightleft = state.maximageweight;
+      } else if (state.imageweightleft < state.minimageweight) {
+        state.imageweightleft = state.minimageweight;
       }
     },
     updateImageWeightRight(state, payload) {
       state.imageweightright = Math.abs(payload);
 
-      if (state.imageweightright > 10) {
-        state.imageweightright = 10;
-      } else if (state.imageweightright < 0) {
-        state.imageweightright = 0;
+      if (state.imageweightright > state.maximageweight) {
+        state.imageweightright = state.maximageweight;
+      } else if (state.imageweightright < state.minimageweight) {
+        state.imageweightright = state.minimageweight;
       }
     },
 
     updateMetaDetailsLeft(state, payload) {
       state.metadetailsleft = Math.abs(payload);
 
-      if (state.metadetailsleft > 7) {
-        state.metadetailsleft = 7;
-      } else if (state.metadetailsleft < 0) {
-        state.metadetailsleft = 0;
+      if (state.metadetailsleft > state.maxmetadetails) {
+        state.metadetailsleft = state.maxmetadetails;
+      } else if (state.metadetailsleft < state.minmetadetails) {
+        state.metadetailsleft = state.minmetadetails;
       }
     },
     updateMetaDetailsRight(state, payload) {
       state.metadetailsright = Math.abs(payload);
 
-      if (state.metadetailsright > 7) {
-        state.metadetailsright = 7;
-      } else if (state.metadetailsright < 0) {
-        state.metadetailsright = 0;
+      if (state.metadetailsright > state.maxmetadetails) {
+        state.metadetailsright = state.maxmetadetails;
+      } else if (state.metadetailsright < state.minmetadetails) {
+        state.metadetailsright = state.minmetadetails;
       }
     },
 
@@ -271,8 +276,8 @@ export default new Vuex.Store({
     updateHierarchyCrossing(state, payload) {
       state.hierarchycrossing = Math.abs(payload);
 
-      if (state.hierarchycrossing > 200) {
-        state.hierarchycrossing = 200;
+      if (state.hierarchycrossing > state.maxhierarchycrossing) {
+        state.hierarchycrossing = state.maxhierarchycrossing;
       } else if (state.hierarchycrossing < 0) {
         state.hierarchycrossing = 0;
       }
