@@ -54,6 +54,10 @@ const getDefaultState = () => {
 
     simulationmode: false,
     simulationaxis: 'gridcolumns',
+
+    useRealPostsDetails: false,
+    fetchpostsurl: 'https://pixelgrade.com/wp-json/wp/v2/posts?_embed',
+    posts: [],
   }
 }
 
@@ -324,6 +328,29 @@ export default new Vuex.Store({
     calculateChildren(state) {
       // Fill the childarea with posts.
       state.childarea = applyLayoutEngine(state, true);
+    },
+
+    updateUseRealPostsDetails(state, payload) {
+      state.useRealPostsDetails = payload === 'on';
+    },
+
+    updateFetchPostsUrl(state, payload) {
+      state.fetchpostsurl = payload;
+    },
+
+    fetchPosts(state) {
+      let postsRequest = new Request(state.fetchpostsurl);
+
+      fetch(postsRequest)
+        .then(function(response) {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+        })
+        .then(function(postsData) {
+          state.posts = postsData;
+        });
     },
 
     resetState(state, payload) {

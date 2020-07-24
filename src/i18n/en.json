@@ -11,7 +11,7 @@
 
     "featuresize": "Feature Size",
     "featuresizeUnits": "(in gridcols)",
-    "featuresizeExtra": "(between 25% and 75% of cols)",
+    "featuresizeExtra": "(between 25% and 75% of gridcols)",
     "featureposition": "Feature Position",
     "featurepositionUnits": "(in gridcols)",
     "minfeatureposition": "range",
@@ -45,6 +45,12 @@
 
     "gridcolumngap": "Grid Column Gap",
     "gridrowgap": "Grid Row Gap",
+
+    "useRealPostsDetails": "Use Real Posts Details",
+    "useRealPostsDetailsExtra": "Replace abstract layout details and colors with real posts details like title, image, etc.",
+    "fetchpostsurl": "Posts Source URL",
+    "fetchpostsurlExtra": "(a WordPress REST API endpoint returning JSON post details)",
+    "fetchposts": "Fetch Posts",
     "codebutton": "Please may I have some code",
     "currentstateurl": "Current state URL",
     "currentstateurlExtra": "(use it to share or save this state)",

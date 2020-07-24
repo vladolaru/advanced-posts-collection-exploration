@@ -479,7 +479,35 @@ export const applyLayoutEngine = (state, debug = false) => {
       'gridArea': `${currentPostDetails.startGridRow} / ${currentPostDetails.startGridColumn} / ${currentPostDetails.endGridRow + 1} / ${currentPostDetails.endGridColumn + 1}`,
       'imageWeight': currentPostDetails.imageWeight,
       'metaDetails': currentPostDetails.metaDetails,
+      'aspectRatioType': 'square',
     };
+
+    // Calculate the aspect ratio.
+    let aspectRatio = (currentPostDetails.endGridColumn - currentPostDetails.startGridColumn + 1) / (currentPostDetails.endGridRow - currentPostDetails.startGridRow + 1);
+    if ( state.flipcolsrows ) {
+      aspectRatio = (currentPostDetails.endGridRow - currentPostDetails.startGridRow + 1) / (currentPostDetails.endGridColumn - currentPostDetails.startGridColumn + 1);
+    }
+    // An aspectRatio over 1 means horizontal, under 1 means vertical.
+    // We will identify certain types.
+    if ( aspectRatio > 1.2) {
+      newLayoutPost.aspectRatioType = 'horizontal';
+    }
+    if ( aspectRatio >= 2) {
+      newLayoutPost.aspectRatioType = 'horizontal-wide';
+    }
+    if ( aspectRatio >= 3) {
+      newLayoutPost.aspectRatioType = 'horizontal-extreme';
+    }
+
+    if ( aspectRatio < 0.9) {
+      newLayoutPost.aspectRatioType = 'vertical';
+    }
+    if ( aspectRatio <= 0.5) {
+      newLayoutPost.aspectRatioType = 'vertical-tall';
+    }
+    if ( aspectRatio <= 0.35) {
+      newLayoutPost.aspectRatioType = 'vertical-extreme';
+    }
 
     // If we should flip rows and columns, simply flip them in the gridArea.
     if ( state.flipcolsrows ) {

@@ -29,8 +29,12 @@
       </div>
     </section>
 
-    <div id="gridcontainer">
+    <div
+      id="gridcontainer"
+      :class="useRealPostsDetails && posts.length ? 'real-posts' : 'abstract'"
+    >
       <section
+        v-if="!(useRealPostsDetails && posts.length)"
         class="grid"
         :style="{ gridTemplateColumns: !flipcolsrows ? colTemplate : rowTemplate, gridTemplateRows: !flipcolsrows ? rowTemplate : colTemplate, gridColumnGap: gridcolumngap + 'px', gridRowGap: gridrowgap + 'px' }"
       >
@@ -49,14 +53,41 @@
         <div
           v-for="(child, i) in childarea"
           :key="child.gridArea"
-          :class="'child' + i"
+          :class="['child-'+i,'card-nth_'+child.nthPost, 'card-image-weight_'+child.imageWeight, 'card-meta-details_'+child.metaDetails, 'card-aspect-ratio-type_'+child.aspectRatioType]"
           :style="{ gridArea: child.gridArea }"
         >
-          <ul class="details">
+
+          <ul
+            v-if="!(useRealPostsDetails && posts.length)"
+            class="details">
             <li>Nth Post: {{child.nthPost}}</li>
             <li>Image Weight Value: {{child.imageWeight}}</li>
             <li>Meta Details Value: {{child.metaDetails}}</li>
           </ul>
+
+          <div v-else class="ui card fluid">
+            <div class="image">
+              <img :src="posts[i % posts.length].jetpack_featured_media_url">
+            </div>
+            <div class="content">
+              <a class="header" :href="posts[i % posts.length].link"><h2>{{posts[i % posts.length].title.rendered}}</h2></a>
+              <div class="meta">
+                <span class="date">Published on {{posts[i % posts.length].date}}</span>
+              </div>
+              <div v-if="['vertical-tall', 'vertical-extreme'].includes(child.aspectRatioType)" class="description excerpt" v-html="posts[i % posts.length].excerpt.rendered"></div>
+              <p></p>
+              <div class="description excerpt" v-html="posts[i % posts.length].excerpt.rendered"></div>
+            </div>
+            <div class="extra content">
+              <a>
+                <i class="comment icon"></i>
+                22 Comments
+              </a>
+              <div class="right floated author">
+                <img class="ui avatar image" :src="posts[i % posts.length]._embedded.author[0].avatar_urls['48']"> {{posts[i % posts.length]._embedded.author[0].name}}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
     </div>
@@ -88,6 +119,7 @@ export default {
       "gridrows",
       "childarea",
       "flipcolsrows",
+      "useRealPostsDetails", "posts"
     ]),
     ...mapGetters(["rowTemplate", "colTemplate", "divNum"])
   },

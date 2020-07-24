@@ -403,6 +403,42 @@
       >
     </fieldset>
 
+    <fieldset>
+      <label for="useRealPostsDetails-off">{{ $t("form.useRealPostsDetails") }}</label>
+      <div class="switch switch--horizontal">
+        <input
+          id="useRealPostsDetails-off"
+          type="radio"
+          name="useRealPostsDetails"
+          :checked="useRealPostsDetails ? '':'checked'"
+          value="off"
+          @change="$store.commit(`updateUseRealPostsDetails`, $event.target.value)"
+        >
+        <label for="useRealPostsDetails-off">Off</label>
+        <input
+          id="useRealPostsDetails-on"
+          type="radio"
+          name="useRealPostsDetails"
+          :checked="useRealPostsDetails ? 'checked':''"
+          value="on"
+          @change="$store.commit(`updateUseRealPostsDetails`, $event.target.value)"
+        >
+        <label for="useRealPostsDetails-on">On</label><span class="toggle-outside"><span class="toggle-inside"></span></span>
+      </div>
+      <label class="label-secondary">{{ $t("form.useRealPostsDetailsExtra") }}</label>
+    </fieldset>
+
+    <p class="label-like">{{ $t("form.fetchpostsurl") }} <span class="extra-info">{{ $t("form.fetchpostsurlExtra") }}</span></p>
+    <fieldset>
+      <input
+        id="fetchpostsurl"
+        type="text"
+        @change="$store.commit(`updateFetchPostsUrl`, $event.target.value)"
+        :value="fetchpostsurl"
+      >
+      <button class="copy-url" @click="$store.commit(`fetchPosts`)">{{ $t("form.fetchposts") }}</button>
+    </fieldset>
+
     <span class="spacer"></span>
 
     <p class="label-like">{{ $t("form.currentstateurl") }} <span class="extra-info">{{ $t("form.currentstateurlExtra") }}</span></p>
@@ -489,7 +525,9 @@ export default {
       "hierarchycrossing", "maxhierarchycrossing",
       "flipcolsrows",
       "simulationmode", "simulationaxis",
-      "gridcolumngap", "gridrowgap"]),
+      "gridcolumngap", "gridrowgap",
+      "useRealPostsDetails", "fetchpostsurl"
+    ]),
     ...mapGetters(["currentStateUrl"])
   },
   watch: {
@@ -557,7 +595,7 @@ aside {
     }
   }
 
-  #currentstateurl {
+  #currentstateurl, #fetchpostsurl {
     width: 75%;
   }
 
