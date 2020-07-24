@@ -6,6 +6,7 @@
         class="grid-wrapper"
         v-for="(simulatedState, i) in simulatedStates"
         :style="{height: simulatedState.gridrows*5+'%'}"
+        @click="$store.commit(`switchFromSimulationMode`, {'simulationaxis': simulationaxis, 'axisvalue': simulatedState[simulationaxis]});"
       >
         <span class="simulatedaxis-value">{{simulationaxis + ': ' + simulatedState[simulationaxis]}}</span>
         <section
@@ -197,6 +198,7 @@ main {
   height: 30%;
   float: left;
   margin: 5px 20px 35px 10px;
+  cursor: pointer;
 
   .grid {
     height: 100%;

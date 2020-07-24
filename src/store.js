@@ -302,6 +302,25 @@ export default new Vuex.Store({
       state.simulationaxis = payload;
     },
 
+    switchFromSimulationMode(state, payload) {
+      state.simulationmode = false;
+      if (typeof payload.simulationaxis !== 'undefined' && typeof payload.axisvalue !== 'undefined') {
+        state[payload.simulationaxis] = payload.axisvalue;
+
+        // Run the adjustment logic on the modified state.
+        maybeUpdateGridColumns(state);
+        maybeUpdateGridRows(state);
+        maybeUpdateFeatureSize(state);
+        maybeUpdateFeaturePosition(state);
+        maybeUpdateFragmentation(state);
+        // Recreate the cols and rows arrs.
+        state.colArr = [];
+        createArr(state.gridcolumns, state.colArr);
+        state.rowArr = [];
+        createArr(state.gridrows, state.rowArr);
+      }
+    },
+
     calculateChildren(state) {
       // Fill the childarea with posts.
       state.childarea = applyLayoutEngine(state, true);
